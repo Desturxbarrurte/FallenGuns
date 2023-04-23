@@ -25,6 +25,7 @@ local Installed = false
 local Scripts = {
 	["FallenGuns - MainServer"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/MainServer");
 	["FallenGuns - Local"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Local.txt");
+	["FallenPlugin - Admin"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Admin.txt");
 	["Effects"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Effects.txt");
 }
 local AD = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Admin.txt")
