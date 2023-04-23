@@ -627,7 +627,7 @@ local ListGuns = function(Label)
 			for i, v in AdminGuis do
 				v.Tabs.Guns.Status.TextLabel.Text = "Checking "..CurrentStage.." ("..tostring(CurrentStageChecked).."/"..tostring(#Parent:GetDescendants())..")"
 			end
-			--task.wait()
+			task.wait()
 		end
 	end
 
