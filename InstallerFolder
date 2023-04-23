@@ -1,5 +1,6 @@
 local fallenGuns___Installing = Instance.new("Folder")
 fallenGuns___Installing.Name = "FallenGuns - Installing"
+fallenGuns___Installing.Parent = workspace
 
 local starterGui = Instance.new("Folder")
 starterGui.Name = "StarterGui"
@@ -384,5 +385,3 @@ modules.Parent = fallenGuns
 fallenGuns.Parent = replicatedStorage
 
 replicatedStorage.Parent = fallenGuns___Installing
-
-return fallenGuns___Installing
