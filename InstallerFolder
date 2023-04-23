@@ -88,9 +88,9 @@ ammo.Size = UDim2.new(0.14, 0, 0.227, 0)
 local val = Instance.new("TextLabel")
 val.Name = "Val"
 val.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
+	"rbxasset://fonts/families/Ubuntu.json",
+	Enum.FontWeight.Medium,
+	Enum.FontStyle.Normal
 )
 val.Text = "30/30"
 val.TextColor3 = Color3.fromRGB(0, 255, 100)
@@ -110,9 +110,9 @@ ammo.Parent = specs
 local shootEngine = Instance.new("TextLabel")
 shootEngine.Name = "ShootEngine"
 shootEngine.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
+	"rbxasset://fonts/families/Ubuntu.json",
+	Enum.FontWeight.Medium,
+	Enum.FontStyle.Normal
 )
 shootEngine.Text = "Automatic"
 shootEngine.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -140,9 +140,9 @@ target.Size = UDim2.new(0.14, 0, 0.227, 0)
 local val1 = Instance.new("TextLabel")
 val1.Name = "Val"
 val1.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
+	"rbxasset://fonts/families/Ubuntu.json",
+	Enum.FontWeight.Medium,
+	Enum.FontStyle.Normal
 )
 val1.Text = "Nil"
 val1.TextColor3 = Color3.fromRGB(255, 0, 0)
@@ -271,9 +271,9 @@ ammo1.Size = UDim2.new(0.14, 0, 0.227, 0)
 local val2 = Instance.new("TextLabel")
 val2.Name = "Val"
 val2.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
+	"rbxasset://fonts/families/Ubuntu.json",
+	Enum.FontWeight.Medium,
+	Enum.FontStyle.Normal
 )
 val2.Text = "30/30"
 val2.TextColor3 = Color3.fromRGB(0, 255, 100)
@@ -293,9 +293,9 @@ ammo1.Parent = specs1
 local shootEngine1 = Instance.new("TextLabel")
 shootEngine1.Name = "ShootEngine"
 shootEngine1.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
+	"rbxasset://fonts/families/Ubuntu.json",
+	Enum.FontWeight.Medium,
+	Enum.FontStyle.Normal
 )
 shootEngine1.Text = "Automatic"
 shootEngine1.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -323,9 +323,9 @@ target1.Size = UDim2.new(0.14, 0, 0.227, 0)
 local val3 = Instance.new("TextLabel")
 val3.Name = "Val"
 val3.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
+	"rbxasset://fonts/families/Ubuntu.json",
+	Enum.FontWeight.Medium,
+	Enum.FontStyle.Normal
 )
 val3.Text = "Nil"
 val3.TextColor3 = Color3.fromRGB(255, 0, 0)
