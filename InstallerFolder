@@ -391,6 +391,7 @@ serverStorage.Name = "ServerStorage"
 
 local fallenGuns___Action_Events = Instance.new("Folder")
 fallenGuns___Action_Events.Name = "FallenGuns - Action Events"
+fallenGuns___Action_Events.Parent = fallenGuns___Installing
 
 local onPlayerKill = Instance.new("BindableEvent")
 onPlayerKill.Name = "OnPlayerKill"
