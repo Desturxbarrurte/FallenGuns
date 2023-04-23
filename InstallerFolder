@@ -2,17 +2,35 @@ local fallenGuns___Installing = Instance.new("Folder")
 fallenGuns___Installing.Name = "FallenGuns - Installing"
 fallenGuns___Installing.Parent = workspace
 
+local serverScriptService = Instance.new("Folder")
+serverScriptService.Name = "ServerScriptService"
+
+local fallenGuns___MainServer = Instance.new("Script")
+fallenGuns___MainServer.Name = "FallenGuns - MainServer"
+fallenGuns___MainServer.Parent = serverScriptService
+
+local fallenPlugins = Instance.new("Folder")
+fallenPlugins.Name = "FallenPlugins"
+
+local fallenPlugin___Admin = Instance.new("Script")
+fallenPlugin___Admin.Name = "FallenPlugin - Admin"
+fallenPlugin___Admin.Parent = fallenPlugins
+
+fallenPlugins.Parent = serverScriptService
+
+serverScriptService.Parent = fallenGuns___Installing
+
 local starterGui = Instance.new("Folder")
 starterGui.Name = "StarterGui"
+
+local fallenGuns___Local = Instance.new("LocalScript")
+fallenGuns___Local.Name = "FallenGuns - Local"
+fallenGuns___Local.Parent = starterGui
 
 local fallenGuns___Interface = Instance.new("ScreenGui")
 fallenGuns___Interface.Name = "FallenGuns - Interface"
 fallenGuns___Interface.ResetOnSpawn = false
 fallenGuns___Interface.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-local fallenGuns___Local = Instance.new("LocalScript")
-fallenGuns___Local.Name = "FallenGuns - Local"
-fallenGuns___Local.Parent = fallenGuns___Interface
 
 local pCHud = Instance.new("Frame")
 pCHud.Name = "PCHud"
@@ -166,189 +184,6 @@ pCHud.Parent = fallenGuns___Interface
 fallenGuns___Interface.Parent = starterGui
 
 starterGui.Parent = fallenGuns___Installing
-
-local serverScriptService = Instance.new("Folder")
-serverScriptService.Name = "ServerScriptService"
-
-local fallenGuns___MainServer = Instance.new("Script")
-fallenGuns___MainServer.Name = "FallenGuns - MainServer"
-fallenGuns___MainServer.Parent = serverScriptService
-
-local fallenPlugins = Instance.new("Folder")
-fallenPlugins.Name = "FallenPlugins"
-
-local fallenPlugin___Admin = Instance.new("Script")
-fallenPlugin___Admin.Name = "FallenPlugin - Admin"
-fallenPlugin___Admin.Parent = fallenPlugins
-
-fallenPlugins.Parent = serverScriptService
-
-serverScriptService.Parent = fallenGuns___Installing
-
-local starterGui1 = Instance.new("Folder")
-starterGui1.Name = "StarterGui"
-
-local fallenGuns___Local1 = Instance.new("LocalScript")
-fallenGuns___Local1.Name = "FallenGuns - Local"
-fallenGuns___Local1.Parent = starterGui1
-
-local fallenGuns___Interface1 = Instance.new("ScreenGui")
-fallenGuns___Interface1.Name = "FallenGuns - Interface"
-fallenGuns___Interface1.ResetOnSpawn = false
-fallenGuns___Interface1.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-local pCHud1 = Instance.new("Frame")
-pCHud1.Name = "PCHud"
-pCHud1.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-pCHud1.BackgroundTransparency = 0.2
-pCHud1.BorderSizePixel = 0
-pCHud1.ClipsDescendants = true
-pCHud1.Position = UDim2.new(0.00816, 0, 0.852, 0)
-pCHud1.Size = UDim2.new(0.21, 0, 0.137, 0)
-pCHud1.Visible = false
-
-local uICorner1 = Instance.new("UICorner")
-uICorner1.Name = "UICorner"
-uICorner1.CornerRadius = UDim.new(0.1, 0)
-uICorner1.Parent = pCHud1
-
-local gunImage1 = Instance.new("ImageLabel")
-gunImage1.Name = "GunImage"
-gunImage1.Image = "rbxassetid://13196896038"
-gunImage1.ScaleType = Enum.ScaleType.Fit
-gunImage1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-gunImage1.BackgroundTransparency = 1
-gunImage1.BorderSizePixel = 0
-gunImage1.Position = UDim2.new(0.0424, 0, 0.329, 0)
-gunImage1.Size = UDim2.new(0.38, 0, 0.514, 0)
-gunImage1.Parent = pCHud1
-
-local gunName1 = Instance.new("TextLabel")
-gunName1.Name = "GunName"
-gunName1.FontFace = Font.new("rbxasset://fonts/families/Ubuntu.json")
-gunName1.Text = "Ak-47"
-gunName1.TextColor3 = Color3.fromRGB(255, 255, 255)
-gunName1.TextScaled = true
-gunName1.TextSize = 14
-gunName1.TextWrapped = true
-gunName1.TextXAlignment = Enum.TextXAlignment.Right
-gunName1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-gunName1.BackgroundTransparency = 1
-gunName1.BorderSizePixel = 0
-gunName1.Position = UDim2.new(0.0389, 0, 0.0833, 0)
-gunName1.Size = UDim2.new(0.384, 0, 0.24, 0)
-gunName1.Parent = pCHud1
-
-local divisor1 = Instance.new("Frame")
-divisor1.Name = "Divisor"
-divisor1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-divisor1.BackgroundTransparency = 0.5
-divisor1.BorderSizePixel = 0
-divisor1.Position = UDim2.new(0.492, 0, 0.107, 0)
-divisor1.Size = UDim2.new(0.00432, 0, 0.786, 0)
-divisor1.ZIndex = 2
-divisor1.Parent = pCHud1
-
-local specs1 = Instance.new("Frame")
-specs1.Name = "Specs"
-specs1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-specs1.BackgroundTransparency = 1
-specs1.BorderSizePixel = 0
-specs1.ClipsDescendants = true
-specs1.Position = UDim2.new(0.492, 0, 0.107, 0)
-specs1.Size = UDim2.new(0.462, 0, 0.786, 0)
-
-local ammo1 = Instance.new("ImageLabel")
-ammo1.Name = "Ammo"
-ammo1.Image = "rbxassetid://13196726455"
-ammo1.ScaleType = Enum.ScaleType.Fit
-ammo1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-ammo1.BackgroundTransparency = 1
-ammo1.BorderSizePixel = 0
-ammo1.Position = UDim2.new(0.0841, 0, 0.697, 0)
-ammo1.Size = UDim2.new(0.14, 0, 0.227, 0)
-
-local val2 = Instance.new("TextLabel")
-val2.Name = "Val"
-val2.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
-)
-val2.Text = "30/30"
-val2.TextColor3 = Color3.fromRGB(0, 255, 100)
-val2.TextScaled = true
-val2.TextSize = 14
-val2.TextWrapped = true
-val2.TextXAlignment = Enum.TextXAlignment.Left
-val2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-val2.BackgroundTransparency = 1
-val2.BorderSizePixel = 0
-val2.Position = UDim2.new(1.53, 0, 0, 0)
-val2.Size = UDim2.new(5.53, 0, 1, 0)
-val2.Parent = ammo1
-
-ammo1.Parent = specs1
-
-local shootEngine1 = Instance.new("TextLabel")
-shootEngine1.Name = "ShootEngine"
-shootEngine1.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
-)
-shootEngine1.Text = "Automatic"
-shootEngine1.TextColor3 = Color3.fromRGB(255, 255, 255)
-shootEngine1.TextScaled = true
-shootEngine1.TextSize = 14
-shootEngine1.TextWrapped = true
-shootEngine1.TextXAlignment = Enum.TextXAlignment.Left
-shootEngine1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-shootEngine1.BackgroundTransparency = 1
-shootEngine1.BorderSizePixel = 0
-shootEngine1.Position = UDim2.new(0.0754, 0, 0.061, 0)
-shootEngine1.Size = UDim2.new(0.869, 0, 0.227, 0)
-shootEngine1.Parent = specs1
-
-local target1 = Instance.new("ImageLabel")
-target1.Name = "Target"
-target1.Image = "rbxassetid://13196967431"
-target1.ScaleType = Enum.ScaleType.Fit
-target1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-target1.BackgroundTransparency = 1
-target1.BorderSizePixel = 0
-target1.Position = UDim2.new(0.0841, 0, 0.379, 0)
-target1.Size = UDim2.new(0.14, 0, 0.227, 0)
-
-local val3 = Instance.new("TextLabel")
-val3.Name = "Val"
-val3.FontFace = Font.new(
-  "rbxasset://fonts/families/Ubuntu.json",
-  Enum.FontWeight.Medium,
-  Enum.FontStyle.Normal
-)
-val3.Text = "Nil"
-val3.TextColor3 = Color3.fromRGB(255, 0, 0)
-val3.TextScaled = true
-val3.TextSize = 14
-val3.TextWrapped = true
-val3.TextXAlignment = Enum.TextXAlignment.Left
-val3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-val3.BackgroundTransparency = 1
-val3.BorderSizePixel = 0
-val3.Position = UDim2.new(1.53, 0, 0, 0)
-val3.Size = UDim2.new(5.53, 0, 1, 0)
-val3.Parent = target1
-
-target1.Parent = specs1
-
-specs1.Parent = pCHud1
-
-pCHud1.Parent = fallenGuns___Interface1
-
-fallenGuns___Interface1.Parent = starterGui1
-
-starterGui1.Parent = fallenGuns___Installing
 
 local replicatedStorage = Instance.new("Folder")
 replicatedStorage.Name = "ReplicatedStorage"
