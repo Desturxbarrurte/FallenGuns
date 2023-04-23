@@ -1,0 +1,175 @@
+--[[
+
+	:::::::::::::::  .::::::::::::::.  :::::			:::::            :::::::::::::::: ::::::: 	    ::::
+	::::::::::::::: :::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::::::	    ::::
+	::::			:::: 		  :::: :::::			:::::			 :::::			  :::: ::::	    ::::
+	::::			::::          :::: :::::			:::::			 :::::			  ::::  ::::	::::
+	::::::::::::::: ::::	      :::: :::::			:::::		     :::::			  ::::   ::::   ::::
+	::::::::::::::: ::::	      :::: :::::			:::::			 :::::::::::::::: ::::    ::::  ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::     :::: ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::		   	  ::::      ::::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	     :::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	      ::::::
+	::::			::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		   :::::
+	::::		    ::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		    ::::
+	
+
+]] -->> Fallen Guns ©2023, made by Desturxbarrurte (Sayed#9390)
+
+local HtppService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local Installed = false
+
+local Scripts = {
+	["FallenGuns - MainServer"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/MainServer");
+	["FallenGuns - Local"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Local.txt");
+	["Effects"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Effects.txt");
+}
+local AD = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Admin.txt")
+local IF = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/InstallerFolder")
+
+local Perms = HtppService:JSONDecode(HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Permissions"))
+
+local CanInstall = false
+
+for i, v in Perms do
+	if i:lower() == Player.Name:lower() then
+		CanInstall = true
+		break
+	end
+end
+
+if CanInstall then
+	local Blur = Instance.new("BlurEffect")
+	Blur.Parent = game:GetService("Lighting")
+	Blur.Size = 20
+	
+	local installer = Instance.new("ScreenGui")
+	installer.Name = "Installer"
+	installer.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	installer.Parent = game:GetService("CoreGui")
+
+	local frame = Instance.new("Frame")
+	frame.Name = "Frame"
+	frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	frame.BackgroundTransparency = 0.5
+	frame.BorderSizePixel = 0
+	frame.Size = UDim2.new(1, 0, 1, 0)
+	frame.ZIndex = 0
+	frame.Parent = installer
+
+	local mainWindow = Instance.new("Frame")
+	mainWindow.Name = "MainWindow"
+	mainWindow.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	mainWindow.BackgroundTransparency = 0.2
+	mainWindow.BorderSizePixel = 0
+	mainWindow.Position = UDim2.new(0.378, 0, 0.281, 0)
+	mainWindow.Size = UDim2.new(0.242, 0, 0.436, 0)
+
+	local uICorner = Instance.new("UICorner")
+	uICorner.Name = "UICorner"
+	uICorner.CornerRadius = UDim.new(0.05, 0)
+	uICorner.Parent = mainWindow
+
+	local imageLabel = Instance.new("ImageLabel")
+	imageLabel.Name = "ImageLabel"
+	imageLabel.Image = "rbxassetid://13221110797"
+	imageLabel.ScaleType = Enum.ScaleType.Fit
+	imageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	imageLabel.BackgroundTransparency = 1
+	imageLabel.BorderSizePixel = 0
+	imageLabel.Position = UDim2.new(0.0961, 0, 0.0765, 0)
+	imageLabel.Size = UDim2.new(0.794, 0, 0.25, 0)
+	imageLabel.Parent = mainWindow
+
+	local install = Instance.new("TextButton")
+	install.Name = "Install"
+	install.FontFace = Font.new("rbxasset://fonts/families/Nunito.json")
+	install.Text = "Install/Update"
+	install.TextColor3 = Color3.fromRGB(255, 255, 255)
+	install.TextScaled = true
+	install.TextSize = 14
+	install.TextWrapped = true
+	install.AutoButtonColor = false
+	install.BackgroundColor3 = Color3.fromRGB(37, 48, 148)
+	install.BorderSizePixel = 0
+	install.Position = UDim2.new(0.106, 0, 0.799, 0)
+	install.Size = UDim2.new(0.782, 0, 0.139, 0)
+
+	local uICorner1 = Instance.new("UICorner")
+	uICorner1.Name = "UICorner"
+	uICorner1.CornerRadius = UDim.new(0.2, 0)
+	uICorner1.Parent = install
+
+	install.Parent = mainWindow
+
+	local textLabel = Instance.new("TextLabel")
+	textLabel.Name = "TextLabel"
+	textLabel.FontFace = Font.new("rbxasset://fonts/families/Nunito.json")
+	textLabel.Text = "Logged as: "..Perms[Player.Name]
+	textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel.TextScaled = true
+	textLabel.TextSize = 14
+	textLabel.TextTransparency = 0.3
+	textLabel.TextWrapped = true
+	textLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel.BackgroundTransparency = 1
+	textLabel.BorderSizePixel = 0
+	textLabel.Position = UDim2.new(0.119, 0, 0.719, 0)
+	textLabel.Size = UDim2.new(0.772, 0, 0.08, 0)
+	textLabel.Parent = mainWindow
+
+	mainWindow.Parent = installer
+
+	local textLabel1 = Instance.new("TextLabel")
+	textLabel1.Name = "TextLabel"
+	textLabel1.FontFace = Font.new("rbxasset://fonts/families/Nunito.json")
+	textLabel1.Text = "Fallen Guns ©2023, made by Desturxbarrurte (Sayed#9390)"
+	textLabel1.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel1.TextScaled = true
+	textLabel1.TextSize = 14
+	textLabel1.TextTransparency = 0.5
+	textLabel1.TextWrapped = true
+	textLabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel1.BackgroundTransparency = 1
+	textLabel1.BorderSizePixel = 0
+	textLabel1.Position = UDim2.new(0.364, 0, 0.964, 0)
+	textLabel1.Size = UDim2.new(0.27, 0, 0.026, 0)
+	textLabel1.Parent = installer
+	
+	local FI: Folder
+	install.MouseButton1Click:Connect(function()
+		if not Installed then
+			loadstring(IF)()
+			FI = workspace:WaitForChild("FallenGuns - Installing")
+			
+			for i, v in FI:GetDescendants() do
+				if v.ClassName:find("Script") then
+					v.Source = Scripts[v.Name]
+				end
+			end
+			
+			for i, v in FI:GetChildren() do
+				local Parent = game:GetService(v.Name)
+
+				if Parent then
+					for x, y in v:GetChildren() do
+						local del = Parent:FindFirstChild(y.Name)
+						if del and del.ClassName == y.ClassName then del:Destroy() end
+						y.Parent = Parent
+					end
+				end
+			end
+			textLabel.Text = "Installed."
+			install.Text = "Close"
+			Installed = true
+		else
+			FI:Destroy()
+			installer:Destroy()
+			Blur:Destroy()
+		end
+	end)
+	else warn("You're not listed in Fallen Guns files or your connection to github is bad.")
+end
