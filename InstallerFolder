@@ -385,3 +385,15 @@ modules.Parent = fallenGuns
 fallenGuns.Parent = replicatedStorage
 
 replicatedStorage.Parent = fallenGuns___Installing
+
+local serverStorage = Instance.new("Folder")
+serverStorage.Name = "ServerStorage"
+
+local fallenGuns___Action_Events = Instance.new("Folder")
+fallenGuns___Action_Events.Name = "FallenGuns - Action Events"
+
+local onPlayerKill = Instance.new("BindableEvent")
+onPlayerKill.Name = "OnPlayerKill"
+onPlayerKill.Parent = fallenGuns___Action_Events
+
+fallenGuns___Action_Events.Parent = serverStorage
