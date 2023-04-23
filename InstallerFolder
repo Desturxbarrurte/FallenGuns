@@ -12,7 +12,7 @@ fallenGuns___Interface.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local fallenGuns___Local = Instance.new("LocalScript")
 fallenGuns___Local.Name = "FallenGuns - Local"
-fallenGuns___Local.Parent = fallenGuns___Interface
+fallenGuns___Local.Parent = startergui
 
 local pCHud = Instance.new("Frame")
 pCHud.Name = "PCHud"
