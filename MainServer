@@ -1,0 +1,112 @@
+--[[
+
+	:::::::::::::::  .::::::::::::::.  :::::			:::::            :::::::::::::::: ::::::: 	    ::::
+	::::::::::::::: :::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::::::	    ::::
+	::::			:::: 		  :::: :::::			:::::			 :::::			  :::: ::::	    ::::
+	::::			::::          :::: :::::			:::::			 :::::			  ::::  ::::	::::
+	::::::::::::::: ::::	      :::: :::::			:::::		     :::::			  ::::   ::::   ::::
+	::::::::::::::: ::::	      :::: :::::			:::::			 :::::::::::::::: ::::    ::::  ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::     :::: ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::		   	  ::::      ::::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	     :::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	      ::::::
+	::::			::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		   :::::
+	::::		    ::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		    ::::
+	
+
+]] -->> Fallen Guns ©2023, made by Desturxbarrurte (Sayed#9390)
+
+--<|| Services ||>--
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
+--<|| Folders ||>--
+local MainFolder = ReplicatedStorage.FallenGuns
+local Remotes = MainFolder.Remotes
+local ActionEvents = ServerStorage["FallenGuns - Action Events"]
+--<|| Tables ||>--
+local PlayersInformation = {}
+--<|| Defaults ||>--
+local KickMessage = "You've been kicked for suspect actions - Fallen Guns©."
+local SuspectActionsTillKick = 25
+--<|| Functions ||>--
+local BasicCheatCheck = function(Player: Player, ToolName: string)
+	local Character = Player.Character
+	if not Character then return end
+	
+	if not PlayersInformation[Player] then
+		PlayersInformation[Player] = {}
+		PlayersInformation[Player]["FA"] = 0
+	end
+	
+	local Tool: Tool = Character:FindFirstChild(ToolName)
+	if Tool and Tool:IsA("Tool") then
+		local Settings =  Tool:FindFirstChild("Settings")
+		if Settings and Settings:FindFirstChild("IsAFallenGun") then
+			Settings = require(Settings)
+			return Settings, Tool, Character
+		else
+			Player:Kick(KickMessage)
+		end
+	else
+		Player:Kick(KickMessage)
+	end
+end
+--<|| Connections ||>--
+Remotes.Fire.OnServerEvent:Connect(function(Player, ToolName: string, RayCast:RaycastResult, Position:Vector3, Origin: Vector3)
+	local Settings, Tool, Character = BasicCheatCheck(Player, ToolName)
+	if not Origin or (Origin - Tool.FirePart.Position).Magnitude >= 20 then PlayersInformation[Player].FA +=1 end
+	if PlayersInformation[Player].FA >= SuspectActionsTillKick then Player:Kick(KickMessage) end
+	if Settings.CurrentAmmo < 1 then return end
+	Settings.CurrentAmmo -= 1
+	if RayCast then
+		local Humanoid: Humanoid = RayCast.Instance.Parent:FindFirstChildOfClass("Humanoid")
+		if not Humanoid then
+			Humanoid = RayCast.Instance.Parent.Parent:FindFirstChildOfClass("Humanoid")
+		end
+		
+		if Humanoid and Humanoid.Health > 0 then
+			local RayParams = RaycastParams.new()
+			RayParams.FilterType = Enum.RaycastFilterType.Blacklist
+			RayParams.FilterDescendantsInstances = {Character}
+			
+			local RR = workspace:Raycast(Tool.FirePart.Position, (Position-Tool.FirePart.Position).Unit*10000, RayParams)
+			if RR then
+				if RR.Instance == RayCast.Instance and RR.Distance <= Settings.Range then
+					local Damage = Settings.Damage
+					if RR.Instance.Name == "Head" then
+						Damage = Settings.HeadShotDamage
+					end
+
+					Humanoid:TakeDamage(Damage)
+					if Humanoid.Health <= 0 then
+						ActionEvents.OnPlayerKill:Fire(Player, Humanoid.Parent, Tool, Settings.Silhouette)
+					end
+					RayCast = RR
+				end
+			end
+		end
+		
+		RayCast = {
+			["Position"] = RayCast.Position,
+			["Instance"] = RayCast.Instance,
+			["Normal"] = RayCast.Normal,
+			["Distance"] = RayCast.Distance,
+			["Material"] = RayCast.Material,
+		}
+		
+		Remotes.Effects:FireAllClients(Player, Tool.FirePart, RayCast, Settings.Sounds, Position)
+	end
+end)
+
+Remotes.Reload.OnServerEvent:Connect(function(Player, ToolName)
+	local Settings, Tool: Tool, Character = BasicCheatCheck(Player, ToolName)
+	local Thread = task.delay(Settings.ReloadTime, function()
+		if Tool.Parent == Character then
+			Settings.CurrentAmmo = Settings.Ammo
+			Remotes.Reload:FireClient(Player, Tool)
+		end
+	end)
+	
+	Tool.Unequipped:Connect(function() coroutine.close(Thread) end)
+end)
