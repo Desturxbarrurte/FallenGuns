@@ -1,0 +1,751 @@
+--[[
+
+	:::::::::::::::  .::::::::::::::.  :::::			:::::            :::::::::::::::: ::::::: 	    ::::
+	::::::::::::::: :::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::::::	    ::::
+	::::			:::: 		  :::: :::::			:::::			 :::::			  :::: ::::	    ::::
+	::::			::::          :::: :::::			:::::			 :::::			  ::::  ::::	::::
+	::::::::::::::: ::::	      :::: :::::			:::::		     :::::			  ::::   ::::   ::::
+	::::::::::::::: ::::	      :::: :::::			:::::			 :::::::::::::::: ::::    ::::  ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::     :::: ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::		   	  ::::      ::::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	     :::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	      ::::::
+	::::			::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		   :::::
+	::::		    ::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		    ::::
+	
+
+]] -->> Fallen Guns ©2023, made by Desturxbarrurte (Sayed#9390)
+
+--<|| Services ||>--
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
+local Lighting = game:GetService("Lighting")
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
+local ServerScriptService = game:GetService("ServerScriptService")
+local StarterPlayer = game:GetService("StarterPlayer")
+local StarterPack = game:GetService("StarterPack")
+--<|| Server-Defaults ||>--
+local Listing = false
+--<|| Folders ||>--
+local Actions = ServerStorage["FallenGuns - Action Events"]
+--<|| Tables ||>--
+local Admins = {
+	1069020134;
+}
+local AdminGuis = {}
+local ListedGuns = {}
+--<|| Functions ||>--
+
+local CreateGui = function(Parent: ScreenGui?)
+	local admin = Instance.new("Frame")
+	admin.Name = "Admin"
+	admin.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	admin.BackgroundTransparency = 0.2
+	admin.BorderSizePixel = 0
+	admin.Position = UDim2.new(0.281, 0, 0.257, 0)
+	admin.Size = UDim2.new(0.436, 0, 0.485, 0)
+	admin.Visible = false
+	admin.Parent = Parent
+
+	local logo = Instance.new("ImageLabel")
+	logo.Name = "Logo"
+	logo.Image = "rbxassetid://13221165361"
+	logo.ScaleType = Enum.ScaleType.Fit
+	logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	logo.BackgroundTransparency = 1
+	logo.BorderSizePixel = 0
+	logo.Position = UDim2.new(0.0166, 0, 0.0235, 0)
+	logo.Size = UDim2.new(0.257, 0, 0.0671, 0)
+	logo.Parent = admin
+
+	local uICorner = Instance.new("UICorner")
+	uICorner.Name = "UICorner"
+	uICorner.CornerRadius = UDim.new(0.03, 0)
+	uICorner.Parent = admin
+
+	local divisor = Instance.new("Frame")
+	divisor.Name = "Divisor"
+	divisor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	divisor.BackgroundTransparency = 0.5
+	divisor.BorderSizePixel = 0
+	divisor.Position = UDim2.new(0.29, 0, 0.0233, 0)
+	divisor.Size = UDim2.new(0.00211, 0, 0.95, 0)
+	divisor.ZIndex = 2
+	divisor.Parent = admin
+
+	local upD = Instance.new("Frame")
+	upD.Name = "UpD"
+	upD.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	upD.BackgroundTransparency = 0.5
+	upD.BorderSizePixel = 0
+	upD.Position = UDim2.new(0.019, 0, 0.108, 0)
+	upD.Size = UDim2.new(0.966, 0, 0.00336, 0)
+	upD.Parent = admin
+
+	local buttons = Instance.new("ScrollingFrame")
+	buttons.Name = "Buttons"
+	buttons.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	buttons.CanvasSize = UDim2.new()
+	buttons.ScrollBarImageColor3 = Color3.fromRGB(0, 0, 0)
+	buttons.ScrollBarThickness = 0
+	buttons.Active = true
+	buttons.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	buttons.BackgroundTransparency = 1
+	buttons.BorderSizePixel = 0
+	buttons.Position = UDim2.new(0.0187, 0, 0.134, 0)
+	buttons.Size = UDim2.new(0.256, 0, 0.815, 0)
+
+	local home = Instance.new("TextButton")
+	home.Name = "Home"
+	home.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json")
+	home.TextColor3 = Color3.fromRGB(0, 0, 0)
+	home.TextScaled = true
+	home.TextSize = 14
+	home.TextTransparency = 1
+	home.TextWrapped = true
+	home.AutoButtonColor = false
+	home.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	home.BackgroundTransparency = 0.5
+	home.BorderSizePixel = 0
+	home.Size = UDim2.new(1, 0, 0.119, 0)
+
+	local uICorner1 = Instance.new("UICorner")
+	uICorner1.Name = "UICorner"
+	uICorner1.CornerRadius = UDim.new(0.2, 0)
+	uICorner1.Parent = home
+
+	local textLabel = Instance.new("TextLabel")
+	textLabel.Name = "TextLabel"
+	textLabel.FontFace = Font.new(
+		"rbxasset://fonts/families/Nunito.json",
+		Enum.FontWeight.Bold,
+		Enum.FontStyle.Normal
+	)
+	textLabel.Text = "Home"
+	textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel.TextScaled = true
+	textLabel.TextSize = 14
+	textLabel.TextWrapped = true
+	textLabel.TextXAlignment = Enum.TextXAlignment.Left
+	textLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel.BackgroundTransparency = 1
+	textLabel.BorderSizePixel = 0
+	textLabel.Position = UDim2.new(0.0815, 0, 0.172, 0)
+	textLabel.Size = UDim2.new(0.895, 0, 0.656, 0)
+	textLabel.Parent = home
+
+	local imageLabel = Instance.new("ImageLabel")
+	imageLabel.Name = "ImageLabel"
+	imageLabel.Image = "rbxassetid://13221562423"
+	imageLabel.ScaleType = Enum.ScaleType.Fit
+	imageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	imageLabel.BackgroundTransparency = 1
+	imageLabel.BorderSizePixel = 0
+	imageLabel.Position = UDim2.new(0.822, 0, 0.25, 0)
+	imageLabel.Size = UDim2.new(0.117, 0, 0.492, 0)
+	imageLabel.Parent = home
+
+	home.Parent = buttons
+
+	local uIGridLayout = Instance.new("UIGridLayout")
+	uIGridLayout.Name = "UIGridLayout"
+	uIGridLayout.CellSize = UDim2.new(1, 0, 0.119, 0)
+	uIGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	uIGridLayout.Parent = buttons
+
+	local guns = Instance.new("TextButton")
+	guns.Name = "Guns"
+	guns.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json")
+	guns.TextColor3 = Color3.fromRGB(0, 0, 0)
+	guns.TextScaled = true
+	guns.TextSize = 14
+	guns.TextTransparency = 1
+	guns.TextWrapped = true
+	guns.AutoButtonColor = false
+	guns.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	guns.BackgroundTransparency = 0.5
+	guns.BorderSizePixel = 0
+	guns.Size = UDim2.new(1, 0, 0.119, 0)
+
+	local uICorner2 = Instance.new("UICorner")
+	uICorner2.Name = "UICorner"
+	uICorner2.CornerRadius = UDim.new(0.2, 0)
+	uICorner2.Parent = guns
+
+	local textLabel1 = Instance.new("TextLabel")
+	textLabel1.Name = "TextLabel"
+	textLabel1.FontFace = Font.new(
+		"rbxasset://fonts/families/Nunito.json",
+		Enum.FontWeight.Bold,
+		Enum.FontStyle.Normal
+	)
+	textLabel1.Text = "Guns"
+	textLabel1.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel1.TextScaled = true
+	textLabel1.TextSize = 14
+	textLabel1.TextWrapped = true
+	textLabel1.TextXAlignment = Enum.TextXAlignment.Left
+	textLabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel1.BackgroundTransparency = 1
+	textLabel1.BorderSizePixel = 0
+	textLabel1.Position = UDim2.new(0.0815, 0, 0.172, 0)
+	textLabel1.Size = UDim2.new(0.895, 0, 0.656, 0)
+	textLabel1.Parent = guns
+
+	local imageLabel1 = Instance.new("ImageLabel")
+	imageLabel1.Name = "ImageLabel"
+	imageLabel1.Image = "rbxassetid://13221664843"
+	imageLabel1.ScaleType = Enum.ScaleType.Fit
+	imageLabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	imageLabel1.BackgroundTransparency = 1
+	imageLabel1.BorderSizePixel = 0
+	imageLabel1.Position = UDim2.new(0.822, 0, 0.25, 0)
+	imageLabel1.Size = UDim2.new(0.117, 0, 0.492, 0)
+	imageLabel1.Parent = guns
+
+	guns.Parent = buttons
+
+	local kills = Instance.new("TextButton")
+	kills.Name = "Kills"
+	kills.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json")
+	kills.TextColor3 = Color3.fromRGB(0, 0, 0)
+	kills.TextScaled = true
+	kills.TextSize = 14
+	kills.TextTransparency = 1
+	kills.TextWrapped = true
+	kills.AutoButtonColor = false
+	kills.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	kills.BackgroundTransparency = 0.5
+	kills.BorderSizePixel = 0
+	kills.Size = UDim2.new(1, 0, 0.119, 0)
+
+	local uICorner3 = Instance.new("UICorner")
+	uICorner3.Name = "UICorner"
+	uICorner3.CornerRadius = UDim.new(0.2, 0)
+	uICorner3.Parent = kills
+
+	local textLabel2 = Instance.new("TextLabel")
+	textLabel2.Name = "TextLabel"
+	textLabel2.FontFace = Font.new(
+		"rbxasset://fonts/families/Nunito.json",
+		Enum.FontWeight.Bold,
+		Enum.FontStyle.Normal
+	)
+	textLabel2.Text = "Kills"
+	textLabel2.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel2.TextScaled = true
+	textLabel2.TextSize = 14
+	textLabel2.TextWrapped = true
+	textLabel2.TextXAlignment = Enum.TextXAlignment.Left
+	textLabel2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel2.BackgroundTransparency = 1
+	textLabel2.BorderSizePixel = 0
+	textLabel2.Position = UDim2.new(0.0815, 0, 0.172, 0)
+	textLabel2.Size = UDim2.new(0.895, 0, 0.656, 0)
+	textLabel2.Parent = kills
+
+	local imageLabel2 = Instance.new("ImageLabel")
+	imageLabel2.Name = "ImageLabel"
+	imageLabel2.Image = "rbxassetid://13221636971"
+	imageLabel2.ScaleType = Enum.ScaleType.Fit
+	imageLabel2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	imageLabel2.BackgroundTransparency = 1
+	imageLabel2.BorderSizePixel = 0
+	imageLabel2.Position = UDim2.new(0.822, 0, 0.25, 0)
+	imageLabel2.Size = UDim2.new(0.117, 0, 0.492, 0)
+	imageLabel2.Parent = kills
+
+	kills.Parent = buttons
+
+	buttons.Parent = admin
+
+	local currentTab = Instance.new("TextLabel")
+	currentTab.Name = "CurrentTab"
+	currentTab.FontFace = Font.new(
+		"rbxasset://fonts/families/Nunito.json",
+		Enum.FontWeight.Bold,
+		Enum.FontStyle.Normal
+	)
+	currentTab.Text = "Home"
+	currentTab.TextColor3 = Color3.fromRGB(255, 255, 255)
+	currentTab.TextScaled = true
+	currentTab.TextWrapped = true
+	currentTab.TextXAlignment = Enum.TextXAlignment.Left
+	currentTab.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	currentTab.BackgroundTransparency = 1
+	currentTab.BorderSizePixel = 0
+	currentTab.Position = UDim2.new(0.31, 0, 0.0235, 0)
+	currentTab.Size = UDim2.new(0.257, 0, 0.0671, 0)
+	currentTab.Parent = admin
+
+	local tabs = Instance.new("ScrollingFrame")
+	tabs.Name = "Tabs"
+	tabs.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	tabs.CanvasSize = UDim2.new()
+	tabs.ScrollBarImageColor3 = Color3.fromRGB(20, 20, 30)
+	tabs.ScrollBarThickness = 7
+	tabs.Active = true
+	tabs.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	tabs.BackgroundTransparency = 1
+	tabs.BorderSizePixel = 0
+	tabs.Position = UDim2.new(0.308, 0, 0.134, 0)
+	tabs.Size = UDim2.new(0.677, 0, 0.836, 0)
+
+	local home1 = Instance.new("Frame")
+	home1.Name = "Home"
+	home1.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	home1.BackgroundTransparency = 0.5
+	home1.BorderSizePixel = 0
+	home1.Size = UDim2.new(1, 0, 1, 0)
+
+	local uICorner4 = Instance.new("UICorner")
+	uICorner4.Name = "UICorner"
+	uICorner4.CornerRadius = UDim.new(0.025, 0)
+	uICorner4.Parent = home1
+
+	local imageLabel3 = Instance.new("ImageLabel")
+	imageLabel3.Name = "ImageLabel"
+	imageLabel3.Image = "rbxassetid://13229489144"
+	imageLabel3.ScaleType = Enum.ScaleType.Fit
+	imageLabel3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	imageLabel3.BackgroundTransparency = 1
+	imageLabel3.BorderSizePixel = 0
+	imageLabel3.Position = UDim2.new(0.312, 0, 0.0482, 0)
+	imageLabel3.Size = UDim2.new(0.368, 0, 0.474, 0)
+
+	local uICorner5 = Instance.new("UICorner")
+	uICorner5.Name = "UICorner"
+	uICorner5.CornerRadius = UDim.new(0.1, 0)
+	uICorner5.Parent = imageLabel3
+
+	imageLabel3.Parent = home1
+
+	local version = Instance.new("TextLabel")
+	version.Name = "Version"
+	version.FontFace = Font.new(
+		"rbxasset://fonts/families/Nunito.json",
+		Enum.FontWeight.SemiBold,
+		Enum.FontStyle.Normal
+	)
+	version.Text = "v1.0 (23/04/2023)"
+	version.TextColor3 = Color3.fromRGB(255, 255, 255)
+	version.TextScaled = true
+	version.TextSize = 14
+	version.TextWrapped = true
+	version.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	version.BackgroundTransparency = 1
+	version.BorderSizePixel = 0
+	version.Position = UDim2.new(0.115, 0, 0.59, 0)
+	version.Size = UDim2.new(0.766, 0, 0.0919, 0)
+	version.Parent = home1
+
+	home1.Parent = tabs
+
+	local guns1 = Instance.new("Frame")
+	guns1.Name = "Guns"
+	guns1.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	guns1.BackgroundTransparency = 0.5
+	guns1.BorderSizePixel = 0
+	guns1.Size = UDim2.new(1, 0, 1, 0)
+	guns1.Visible = false
+
+	local uICorner6 = Instance.new("UICorner")
+	uICorner6.Name = "UICorner"
+	uICorner6.CornerRadius = UDim.new(0.025, 0)
+	uICorner6.Parent = guns1
+
+	local scrollingFrame = Instance.new("ScrollingFrame")
+	scrollingFrame.Name = "ScrollingFrame"
+	scrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	scrollingFrame.CanvasSize = UDim2.new()
+	scrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(20, 20, 30)
+	scrollingFrame.ScrollBarThickness = 7
+	scrollingFrame.Active = true
+	scrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	scrollingFrame.BackgroundTransparency = 1
+	scrollingFrame.BorderSizePixel = 0
+	scrollingFrame.Position = UDim2.new(0, 0, 0.0281, 0)
+	scrollingFrame.Size = UDim2.new(1, 0, 0.972, 0)
+
+	local uIListLayout = Instance.new("UIListLayout")
+	uIListLayout.Name = "UIListLayout"
+	uIListLayout.Padding = UDim.new(0.025, 0)
+	uIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	uIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	uIListLayout.Parent = scrollingFrame
+
+	local gun = Instance.new("Frame")
+	gun.Name = "Gun"
+	gun.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	gun.BackgroundTransparency = 0.5
+	gun.BorderSizePixel = 0
+	gun.Position = UDim2.new(-0.00312, 0, 0.309, 0)
+	gun.Size = UDim2.new(0.96, 0, 0.129, 0)
+	gun.Visible = false
+
+	local uICorner7 = Instance.new("UICorner")
+	uICorner7.Name = "UICorner"
+	uICorner7.CornerRadius = UDim.new(0.3, 0)
+	uICorner7.Parent = gun
+
+	local textLabel3 = Instance.new("TextLabel")
+	textLabel3.Name = "TextLabel"
+	textLabel3.FontFace = Font.new("rbxasset://fonts/families/Nunito.json")
+	textLabel3.Text = "Gun"
+	textLabel3.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel3.TextScaled = true
+	textLabel3.TextSize = 14
+	textLabel3.TextWrapped = true
+	textLabel3.TextXAlignment = Enum.TextXAlignment.Left
+	textLabel3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel3.BackgroundTransparency = 1
+	textLabel3.BorderSizePixel = 0
+	textLabel3.Position = UDim2.new(0.0218, 0, 0.167, 0)
+	textLabel3.Size = UDim2.new(0.872, 0, 0.625, 0)
+	textLabel3.Parent = gun
+
+	local get = Instance.new("ImageButton")
+	get.Name = "Get"
+	get.Image = "rbxassetid://13229923948"
+	get.ScaleType = Enum.ScaleType.Fit
+	get.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	get.BackgroundTransparency = 1
+	get.BorderSizePixel = 0
+	get.Position = UDim2.new(0.893, 0, 0.0833, 0)
+	get.Size = UDim2.new(0.085, 0, 0.833, 0)
+	get.Parent = gun
+
+	gun.Parent = scrollingFrame
+
+	scrollingFrame.Parent = guns1
+
+	local status = Instance.new("Frame")
+	status.Name = "Status"
+	status.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	status.BackgroundTransparency = 0.2
+	status.BorderSizePixel = 0
+	status.Position = UDim2.new(0, 0, 0.904, 0)
+	status.Size = UDim2.new(1, 0, 0.0964, 0)
+
+	local uICorner8 = Instance.new("UICorner")
+	uICorner8.Name = "UICorner"
+	uICorner8.CornerRadius = UDim.new(0.3, 0)
+	uICorner8.Parent = status
+
+	local textLabel4 = Instance.new("TextLabel")
+	textLabel4.Name = "TextLabel"
+	textLabel4.FontFace = Font.new("rbxasset://fonts/families/Nunito.json")
+	textLabel4.Text = "Status appear here."
+	textLabel4.TextColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel4.TextScaled = true
+	textLabel4.TextSize = 14
+	textLabel4.TextTransparency = 0.2
+	textLabel4.TextWrapped = true
+	textLabel4.TextXAlignment = Enum.TextXAlignment.Left
+	textLabel4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	textLabel4.BackgroundTransparency = 1
+	textLabel4.BorderSizePixel = 0
+	textLabel4.Position = UDim2.new(0.0218, 0, 0.167, 0)
+	textLabel4.Size = UDim2.new(0.872, 0, 0.625, 0)
+	textLabel4.Parent = status
+
+	local reload = Instance.new("ImageButton")
+	reload.Name = "Reload"
+	reload.Image = "rbxassetid://13229884932"
+	reload.ImageTransparency = 0.2
+	reload.ScaleType = Enum.ScaleType.Fit
+	reload.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	reload.BackgroundTransparency = 1
+	reload.BorderSizePixel = 0
+	reload.Position = UDim2.new(0.916, 0, 0.0833, 0)
+	reload.Size = UDim2.new(0.0623, 0, 0.833, 0)
+	reload.Parent = status
+
+	status.Parent = guns1
+
+	guns1.Parent = tabs
+
+	local kills1 = Instance.new("Frame")
+	kills1.Name = "Kills"
+	kills1.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	kills1.BackgroundTransparency = 0.5
+	kills1.BorderSizePixel = 0
+	kills1.Size = UDim2.new(1, 0, 1, 0)
+	kills1.Visible = false
+
+	local uICorner9 = Instance.new("UICorner")
+	uICorner9.Name = "UICorner"
+	uICorner9.CornerRadius = UDim.new(0.025, 0)
+	uICorner9.Parent = kills1
+
+	local scrollingFrame1 = Instance.new("ScrollingFrame")
+	scrollingFrame1.Name = "ScrollingFrame"
+	scrollingFrame1.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	scrollingFrame1.CanvasSize = UDim2.new()
+	scrollingFrame1.ScrollBarImageColor3 = Color3.fromRGB(20, 20, 30)
+	scrollingFrame1.ScrollBarThickness = 7
+	scrollingFrame1.Active = true
+	scrollingFrame1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	scrollingFrame1.BackgroundTransparency = 1
+	scrollingFrame1.BorderSizePixel = 0
+	scrollingFrame1.Position = UDim2.new(0, 0, 0.0281, 0)
+	scrollingFrame1.Size = UDim2.new(1, 0, 0.972, 0)
+
+	local kill = Instance.new("Frame")
+	kill.Name = "Kill"
+	kill.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	kill.BackgroundTransparency = 0.5
+	kill.BorderSizePixel = 0
+	kill.Position = UDim2.new(0.0202, 0, -6.31e-08, 0)
+	kill.Size = UDim2.new(0.96, 0, 0.137, 0)
+	kill.Visible = false
+
+	local uICorner10 = Instance.new("UICorner")
+	uICorner10.Name = "UICorner"
+	uICorner10.CornerRadius = UDim.new(0.3, 0)
+	uICorner10.Parent = kill
+
+	local p1I = Instance.new("ImageLabel")
+	p1I.Name = "P1I"
+	p1I.Image = "rbxassetid://13230379280"
+	p1I.ImageTransparency = 0.2
+	p1I.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	p1I.BackgroundTransparency = 1
+	p1I.BorderSizePixel = 0
+	p1I.Position = UDim2.new(0.0296, 0, 0.0906, 0)
+	p1I.Size = UDim2.new(0.0877, 0, 0.816, 0)
+	p1I.Parent = kill
+
+	local p1N = Instance.new("TextLabel")
+	p1N.Name = "P1N"
+	p1N.FontFace = Font.new("rbxasset://fonts/families/Nunito.json")
+	p1N.Text = "Desturxbarrurte"
+	p1N.TextColor3 = Color3.fromRGB(255, 255, 255)
+	p1N.TextScaled = true
+	p1N.TextSize = 14
+	p1N.TextWrapped = true
+	p1N.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	p1N.BackgroundTransparency = 1
+	p1N.BorderSizePixel = 0
+	p1N.Position = UDim2.new(0.117, 0, 0.0906, 0)
+	p1N.Size = UDim2.new(0.289, 0, 0.846, 0)
+	p1N.Parent = kill
+
+	local p2I = Instance.new("ImageLabel")
+	p2I.Name = "P2I"
+	p2I.Image = "rbxassetid://13230379280"
+	p2I.ImageTransparency = 0.2
+	p2I.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	p2I.BackgroundTransparency = 1
+	p2I.BorderSizePixel = 0
+	p2I.Position = UDim2.new(0.883, 0, 0.0906, 0)
+	p2I.Size = UDim2.new(0.0877, 0, 0.816, 0)
+	p2I.Parent = kill
+
+	local p2N = Instance.new("TextLabel")
+	p2N.Name = "P2N"
+	p2N.FontFace = Font.new("rbxasset://fonts/families/Nunito.json")
+	p2N.Text = "Desturxbarrurte"
+	p2N.TextColor3 = Color3.fromRGB(255, 255, 255)
+	p2N.TextScaled = true
+	p2N.TextSize = 14
+	p2N.TextWrapped = true
+	p2N.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	p2N.BackgroundTransparency = 1
+	p2N.BorderSizePixel = 0
+	p2N.Position = UDim2.new(0.591, 0, 0.0906, 0)
+	p2N.Size = UDim2.new(0.292, 0, 0.846, 0)
+	p2N.Parent = kill
+
+	local gI = Instance.new("ImageLabel")
+	gI.Name = "GI"
+	gI.Image = "rbxassetid://13196628398"
+	gI.ImageTransparency = 0.2
+	gI.ScaleType = Enum.ScaleType.Fit
+	gI.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	gI.BackgroundTransparency = 1
+	gI.BorderSizePixel = 0
+	gI.Position = UDim2.new(0.375, 0, 0.181, 0)
+	gI.Size = UDim2.new(0.246, 0, 0.665, 0)
+	gI.Parent = kill
+
+	kill.Parent = scrollingFrame1
+
+	local uIListLayout1 = Instance.new("UIListLayout")
+	uIListLayout1.Name = "UIListLayout"
+	uIListLayout1.Padding = UDim.new(0.025, 0)
+	uIListLayout1.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	uIListLayout1.SortOrder = Enum.SortOrder.LayoutOrder
+	uIListLayout1.Parent = scrollingFrame1
+
+	scrollingFrame1.Parent = kills1
+
+	kills1.Parent = tabs
+
+	tabs.Parent = admin
+
+	local close = Instance.new("ImageButton")
+	close.Name = "Close"
+	close.Image = "rbxassetid://13231086432"
+	close.ImageColor3 = Color3.fromRGB(255, 0, 100)
+	close.ScaleType = Enum.ScaleType.Fit
+	close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	close.BackgroundTransparency = 1
+	close.BorderSizePixel = 0
+	close.Position = UDim2.new(0.956, 0, 0.0336, 0)
+	close.Size = UDim2.new(0.0274, 0, 0.0436, 0)
+	close.Parent = admin
+
+	return admin, buttons, tabs, currentTab
+end
+
+
+local ListGuns = function(Label)
+	local Listed = {}
+	local LG = 0
+	local CurrentStage
+	local CurrentStageChecked = 0
+
+	local CheckParent = function(Parent)
+		for i, v in Parent:GetDescendants() do
+			CurrentStageChecked += 1
+			if v:IsA("Tool") then
+				if not Listed[v.Name] then
+					local Settings = v:FindFirstChild("Settings")
+					if Settings then
+						if Settings:FindFirstChild("IsAFallenGun") then
+							local Gun = v:Clone()
+							Gun.Parent = script
+							Listed[v.Name] = Gun
+							LG += 1
+						end
+					end
+				end
+			end
+			for i, v in AdminGuis do
+				v.Tabs.Guns.Status.TextLabel.Text = "Checking "..CurrentStage.." ("..tostring(CurrentStageChecked).."/"..tostring(#Parent:GetDescendants())..")"
+			end
+			--task.wait()
+		end
+	end
+
+	CurrentStage = "ReplicatedStorage"
+	CheckParent(ReplicatedStorage)
+	CurrentStageChecked = 0
+	CurrentStage = "ServerStorage"
+	CheckParent(ServerStorage)
+	CurrentStageChecked = 0
+	CurrentStage = "Workspace"
+	CheckParent(workspace)
+	CurrentStageChecked = 0
+	CurrentStage = "Players"
+	CheckParent(Players)
+	CurrentStageChecked = 0
+	CurrentStage = "ReplicatedFirst"
+	CheckParent(ReplicatedFirst)
+	CurrentStageChecked = 0
+	CurrentStage = "Lighting"
+	CheckParent(Lighting)
+	CurrentStageChecked = 0
+	CurrentStage = "StarterPack"
+	CheckParent(StarterPack)
+	CurrentStageChecked = 0
+	CurrentStage = "StarterPlayer"
+	CheckParent(StarterPlayer)
+	task.wait()
+	for i, v in AdminGuis do
+		v.Tabs.Guns.Status.TextLabel.Text = "Listed "..tostring(LG).." guns."
+	end
+	Listing = false
+
+	return Listed, LG
+end
+--<>--
+
+Players.PlayerAdded:Connect(function(Player)
+	if table.find(Admins, Player.UserId) then
+		local Admin, Buttons, Tabs, CurrentTab = CreateGui(Player:WaitForChild("PlayerGui")
+			:WaitForChild("FallenGuns - Interface"))
+		
+		AdminGuis[Player] = {Admin = Admin,Buttons = Buttons, Tabs = Tabs}
+		--<|| Defaults ||>--
+		local OT = "Home"
+		--<|| Open/Close ||>--
+		Player.Chatted:Connect(function(Message)
+			if Message:lower() == "/e fad" then
+				Admin.Visible = not Admin.Visible
+			end
+		end)
+
+		Admin.Close.MouseButton1Click:Connect(function()
+			Admin.Visible = false
+		end)
+		--<>--
+
+		for i, v in Buttons:GetChildren() do
+			if v:IsA("TextButton") then
+				v.MouseButton1Click:Connect(function()
+					if v.Name ~= OT then
+						Tabs[OT].Visible = false
+						Tabs[v.Name].Visible = true
+						OT = v.Name
+						CurrentTab.Text = OT
+					end
+				end)
+			end
+		end
+		
+		Tabs.Guns.Status.Reload.MouseButton1Click:Connect(function()
+			if not Listing then
+				Listing = true
+				task.spawn(function()
+					local l, num = ListGuns(Tabs.Guns.Status.TextLabel)
+					ListedGuns = l
+					
+					if num > 0 then
+						for i, v in AdminGuis do
+							local PlayerGuns = Tabs.Guns
+							for i, v in PlayerGuns.ScrollingFrame:GetChildren() do
+								if not v:IsA("UIListLayout") and v.Name ~= "Gun" then
+									v:Destroy()
+								end
+							end
+							for x, y in ListedGuns do
+								local NewGun = PlayerGuns.ScrollingFrame.Gun:Clone()
+								NewGun.TextLabel.Text = x
+								NewGun.Name = x
+								NewGun.Parent = PlayerGuns.ScrollingFrame
+								NewGun.Visible = true
+								NewGun.Get.MouseButton1Click:Connect(function()
+									local c = y:Clone()
+									c.Parent = i.Backpack
+								end)
+							end
+						end
+					end
+				end)
+			end
+		end)
+	end
+end)
+
+Actions.OnPlayerKill.Event:Connect(function(Killer, Victim, Gun, Silhouette)
+	local NPC = ""
+	local VP = Players:GetPlayerFromCharacter(Victim)
+	if not VP then NPC = " (NPC)" end
+	for i, v in AdminGuis do
+		local Scroll = v.Tabs.Kills.ScrollingFrame
+		local NewKill = Scroll.Kill:Clone()
+		NewKill.P1N.Text = Killer.Name
+		NewKill.P2N.Text = Victim.Name..NPC
+		NewKill.GI.Image = Silhouette
+		NewKill.P1I.Image = Players:GetUserThumbnailAsync(Killer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+		if VP then
+			NewKill.P2I.Image = Players:GetUserThumbnailAsync(Victim.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+		end
+		NewKill.Parent = Scroll
+		NewKill.Visible = true
+	end
+end)
