@@ -384,3 +384,5 @@ modules.Parent = fallenGuns
 fallenGuns.Parent = replicatedStorage
 
 replicatedStorage.Parent = fallenGuns___Installing
+
+return fallenGuns___Installing
