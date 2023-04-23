@@ -1,0 +1,156 @@
+--[[
+
+	:::::::::::::::  .::::::::::::::.  :::::			:::::            :::::::::::::::: ::::::: 	    ::::
+	::::::::::::::: :::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::::::	    ::::
+	::::			:::: 		  :::: :::::			:::::			 :::::			  :::: ::::	    ::::
+	::::			::::          :::: :::::			:::::			 :::::			  ::::  ::::	::::
+	::::::::::::::: ::::	      :::: :::::			:::::		     :::::			  ::::   ::::   ::::
+	::::::::::::::: ::::	      :::: :::::			:::::			 :::::::::::::::: ::::    ::::  ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::     :::: ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::		   	  ::::      ::::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	     :::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	      ::::::
+	::::			::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		   :::::
+	::::		    ::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		    ::::
+	
+
+]] -->> Fallen Guns ©2023, made by Desturxbarrurte (Sayed#9390)
+
+local TweenService = game:GetService("TweenService")
+local EffectsFolder = workspace.Terrain:WaitForChild("FallenGuns - Effects")
+local Effects = {}
+
+
+Effects.BulletHole = function(Raycast: RaycastResult)
+	local BulletHole = Instance.new("Part")
+	BulletHole.Parent = EffectsFolder
+	BulletHole.Name = "FallenGunsBulletHole"
+	BulletHole.CanCollide = false
+	BulletHole.CanTouch = false
+	BulletHole.CanQuery = false
+	BulletHole.Size = Vector3.new(0.45, 0.45, 0)
+	BulletHole.Transparency = 1
+	BulletHole.CFrame = CFrame.new(Raycast.Position, Raycast.Position+Raycast.Normal)
+	local Decal = Instance.new("Decal")
+	Decal.Parent = BulletHole
+	Decal.Texture = "rbxassetid://2859765692"
+	Decal.Color3 = Raycast.Instance.Color
+
+	local Weld = Instance.new("WeldConstraint")
+	Weld.Parent = Raycast.Instance
+	Weld.Part0 = Raycast.Instance
+	Weld.Part1 = BulletHole
+
+	game.Debris:AddItem(Weld, 10)
+	game.Debris:AddItem(BulletHole, 10)
+
+	local a
+	a = Raycast.Instance.Changed:Connect(function(c)
+		if c == "Parent" then
+			if Raycast.Instance.Parent == nil or not workspace:IsAncestorOf(Raycast.Instance.Parent) then
+				a:Disconnect()
+				if BulletHole then
+					BulletHole:Destroy()
+				end
+				if Weld then
+					Weld:Destroy()
+				end
+			end
+		end
+	end)
+
+	return BulletHole, Decal
+end
+
+Effects.Beam = function(From: Part?, Position: Vector3, Raycast: RaycastResult)
+	local Distance = 0
+	local Beam = Instance.new("Beam")
+	Beam.Parent = EffectsFolder
+	Beam.Width0 = 0.1
+	Beam.Width1 = 0.1
+	Beam.Texture = "rbxassetid://2650206619"
+	Beam.TextureMode = Enum.TextureMode.Stretch
+	Beam.ZOffset = 0.5
+	Beam.TextureSpeed = 0
+	Beam.LightEmission = 1
+	Beam.LightInfluence = 1
+	Beam.Color = ColorSequence.new(Color3.new(1, 0.972549, 0.172549))
+	Beam.FaceCamera = true
+	Beam.Transparency = NumberSequence.new(0.5)
+	local A0 = Instance.new("Attachment")
+	A0.Parent = workspace.Terrain
+	A0.Position = From.Position
+	local A1 = Instance.new("Attachment")
+	A1.Parent = workspace.Terrain
+	A1.Position = From.Position
+	Beam.Attachment0 = A0
+	Beam.Attachment1 = A1
+	if Raycast then
+		Distance = (From.Position - Raycast.Position).Magnitude
+		TweenService:Create(
+			A1,
+			TweenInfo.new(Distance/800, Enum.EasingStyle.Quad),
+			{Position = Raycast.Position}
+		):Play()
+		task.delay(0.015, function()
+			TweenService:Create(
+				A0,
+				TweenInfo.new(Distance/550, Enum.EasingStyle.Quad),
+				{Position = Raycast.Position}
+			):Play()
+		end)
+	else
+		Distance = (From.Position - Position).Magnitude
+		TweenService:Create(
+			A1,
+			TweenInfo.new(Distance/800, Enum.EasingStyle.Quad),
+			{Position = Position}
+		):Play()
+		task.delay(0.015, function()
+			TweenService:Create(
+				A0,
+				TweenInfo.new(Distance/550, Enum.EasingStyle.Quad),
+				{Position = Position}
+			):Play()
+		end)
+	end
+	game.Debris:AddItem(Beam, Distance/300)
+	game.Debris:AddItem(A0, Distance/300)
+	game.Debris:AddItem(A1, Distance/300)
+
+	return Distance/300
+end
+
+Effects.ShootFire = function(FirePart: Instance)
+	local Sparkle = Instance.new("ParticleEmitter")
+	Sparkle.Parent = FirePart
+	Sparkle.Size = NumberSequence.new(0, 0.8, 0.8,3, 1)
+	Sparkle.Texture = "rbxassetid://421803006"
+	Sparkle.Speed = NumberRange.new(0, 0)
+	Sparkle.Rate = 500
+	Sparkle.Lifetime = NumberRange.new(0.1)
+	Sparkle.LockedToPart = true
+	Sparkle.LightInfluence = 1
+	Sparkle.LightEmission = 0.4
+	local Fire = Instance.new("ParticleEmitter")
+	Fire.Parent = FirePart
+	Fire.Size = NumberSequence.new(0.20, 0.10)
+	Fire.EmissionDirection = Enum.NormalId.Front
+	Fire.Color = ColorSequence.new(Color3.fromRGB(176, 113, 50), Color3.fromRGB(118, 91, 67), Color3.fromRGB(91, 91, 91))
+	Fire.Texture = "rbxassetid://688705835"
+	Fire.Rate = 100
+	Fire.Lifetime = NumberRange.new(0.25)
+	Fire.Speed = NumberRange.new(5)
+	Fire.LockedToPart = false
+	Fire.LightInfluence = 1
+	Fire.LightEmission = 0.1
+	local Flash = Instance.new("PointLight")
+	Flash.Parent = FirePart
+	Flash.Range = 8
+	Flash.Brightness = 1.5
+	game.Debris:AddItem(Sparkle, 0.1)
+	game.Debris:AddItem(Fire, 0.1)
+	game.Debris:AddItem(Flash, 0.1)
+end
+
+return Effects

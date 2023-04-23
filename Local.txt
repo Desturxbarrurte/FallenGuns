@@ -1,0 +1,488 @@
+--[[
+
+	:::::::::::::::  .::::::::::::::.  :::::			:::::            :::::::::::::::: ::::::: 	    ::::
+	::::::::::::::: :::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::::::	    ::::
+	::::			:::: 		  :::: :::::			:::::			 :::::			  :::: ::::	    ::::
+	::::			::::          :::: :::::			:::::			 :::::			  ::::  ::::	::::
+	::::::::::::::: ::::	      :::: :::::			:::::		     :::::			  ::::   ::::   ::::
+	::::::::::::::: ::::	      :::: :::::			:::::			 :::::::::::::::: ::::    ::::  ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::     :::: ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::		   	  ::::      ::::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	     :::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	      ::::::
+	::::			::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		   :::::
+	::::		    ::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		    ::::
+	
+
+]] -->> Fallen Guns ©2023, made by Desturxbarrurte (Sayed#9390)
+
+--<|| Services ||>--
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local StarterPlayer = game:GetService("StarterPlayer")
+--<|| Player ||>--
+local Player = Players.LocalPlayer
+local Mouse = Player:GetMouse()
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid: Humanoid = Character:WaitForChild("Humanoid")
+local Animator: Animator = Humanoid:WaitForChild("Animator")
+local HumanoidRootPart: Part = Character:WaitForChild("HumanoidRootPart")
+--<|| Folders ||>--
+local MainFolder = ReplicatedStorage.FallenGuns
+local Modules = MainFolder.Modules
+local Remotes = MainFolder.Remotes
+local EffectsFolder = Instance.new("Folder")
+EffectsFolder.Parent = workspace.Terrain
+EffectsFolder.Name = "FallenGuns - Effects"
+--<|| UIs ||>--
+local MainInterface = script.Parent["FallenGuns - Interface"]
+local PCH = MainInterface.PCHud
+--<|| Connections ||>--
+local WaitingReload: RBXScriptConnection
+--<|| Threads ||>--
+local AutomaticShooting: thread
+--<|| Defaults ||>--
+local LastTool: Tool?
+local Tool: Tool = nil
+local Settings: ModuleScript = nil
+local BeforeIcon: string
+local AimIcon = "rbxassetid://11567715572"
+local Offset = Vector3.new(2.5,2.5, 5)
+local Shooting = false
+local Aiming = false
+local DefaultCameraFOV = 70
+--<|| Instances ||>--
+local Camera = workspace.CurrentCamera
+--<|| Pre-Configured ||>--
+local RayParams = RaycastParams.new()
+RayParams.FilterType = Enum.RaycastFilterType.Blacklist
+RayParams.FilterDescendantsInstances = {Character}
+--<|| Tables ||>--
+local TI = {}
+--<|| Modules ||>--
+local Effects = require(Modules.Effects)
+--<|| Functions ||>--
+
+local UpdateHud = function(Property: string)
+	
+	local UpdateFunctions = {}
+	UpdateFunctions.Ammo = function()
+		PCH.Specs.Ammo.Val.Text = tostring(Settings.CurrentAmmo).."/"..tostring(Settings.Ammo)
+		if Settings.CurrentAmmo < 1 then
+			PCH.Specs.Ammo.Val.TextColor3 = Color3.fromRGB(255)
+		elseif PCH.Specs.Ammo.Val.TextColor3 ~= Color3.fromRGB(255, 255, 255) then
+			PCH.Specs.Ammo.Val.TextColor3 = Color3.fromRGB(255, 255, 255)
+		end
+	end
+	UpdateFunctions.Target = function()
+		if Mouse.Target then
+			PCH.Specs.Target.Val.Text = Mouse.Target.Name
+			PCH.Specs.Target.Val.TextColor3 = Color3.fromRGB(0, 255, 150)
+		else
+			PCH.Specs.Target.Val.Text = "Nil"
+			PCH.Specs.Target.Val.TextColor3 = Color3.fromRGB(255)
+		end
+	end
+
+	for i, v in UpdateFunctions do
+		if Property == "all" or Property == i then
+			v()
+		end
+	end
+end
+
+local FixAimCenter = function()
+	local ToolCalledFunction = Tool
+	Camera.CameraType = Enum.CameraType.Scriptable
+	Humanoid.AutoRotate = false
+	local x = 0
+	local y = 0
+
+	local con
+	con = task.spawn(function()
+		local t1: RBXScriptConnection
+		local t2: RBXScriptConnection
+		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+		UserInputService.MouseDeltaSensitivity = 0.1
+		t1 = UserInputService.InputChanged:Connect(function(input, processed)
+			if processed then return end
+			if input.UserInputType == Enum.UserInputType.MouseMovement then
+				x = x - input.Delta.X
+				y = math.clamp(y - input.Delta.Y*0.4, -75, 75)
+
+				HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(-input.Delta.X), 0)
+			end
+		end)
+
+		t2 = RunService.RenderStepped:Connect(function()
+			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
+			
+			if UserInputService.MouseDeltaSensitivity ~= 0.1 then
+				UserInputService.MouseDeltaSensitivity = 0.1
+			end
+			
+			local startCFrame = CFrame.new((HumanoidRootPart.CFrame.Position)) * CFrame.Angles(0, math.rad(x), 0) * CFrame.Angles(math.rad(y), 0, 0)
+			local cameraCFrame = startCFrame:ToWorldSpace(CFrame.new(Offset.X, Offset.Y, Offset.Z))
+			local cameraDirection = startCFrame:ToWorldSpace(CFrame.new(Offset.X, Offset.Y, -10000))
+			local LookAt = CFrame.lookAt(HumanoidRootPart.Position, Camera.CFrame:PointToWorldSpace(Vector3.new(0, 0, -100000)))
+			HumanoidRootPart.CFrame = CFrame.fromMatrix(HumanoidRootPart.Position, LookAt.XVector, HumanoidRootPart.CFrame.YVector)
+			Camera.CFrame = CFrame.new(cameraCFrame.Position, cameraDirection.Position)
+			
+			if Tool ~= ToolCalledFunction then
+				t1:Disconnect()
+				t2:Disconnect()
+				UserInputService.MouseDeltaSensitivity = 1
+				Camera.CameraType = Enum.CameraType.Custom
+				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+				Humanoid.AutoRotate = true
+				coroutine.close(con)
+			end
+		end)
+	end)
+
+	return con
+end
+
+local getrbxassetid = function(number: number)
+	if typeof(number) == "string" then
+		if string.find(number, "rbxassetid://") then
+			return number
+		else
+			number = tonumber(number)
+			if number then
+				return "rbxassetid://"..tostring(number)
+			end
+		end
+	elseif typeof(number) == "number" then
+		return "rbxassetid://"..tostring(number)
+	end
+end
+
+local Aim = function(Action)
+	if Action == true then
+		Aiming = true
+		UserInputService.MouseDeltaSensitivity = 0.05
+		if TI[Tool]["AimAnim"] then
+			TI[Tool]["AimAnim"]:Play()
+		end
+		local NewSpeed = Humanoid.WalkSpeed-5
+		if NewSpeed < 3 then
+			Humanoid.WalkSpeed = NewSpeed
+		end
+		Offset = Vector3.new(Offset.X, Offset.Y, 4)
+		Camera.FieldOfView = Settings.AimFOV
+	else
+		Aiming = false
+		UserInputService.MouseDeltaSensitivity = 0.1
+		Humanoid.WalkSpeed = StarterPlayer.CharacterWalkSpeed
+		Offset = Vector3.new(Offset.X, Offset.Y, 5)
+		Camera.FieldOfView = DefaultCameraFOV
+	end
+end
+
+local Reload = function()
+	if Settings.CurrentAmmo < Settings.Ammo then
+		Aim(false)
+		local ReloadingTool = Tool
+		TI[ReloadingTool].CanShoot = false
+		TI[ReloadingTool].Reloading = true
+
+		Remotes.Reload:FireServer(Tool.Name)
+
+		TI[ReloadingTool]["Animations"]["ReloadAnim"]:Play()
+		ReloadingTool.FirePart.Sounds.ReloadSound:Play()
+
+		WaitingReload = Remotes.Reload.OnClientEvent:Once(function(ToRe)
+			if ToRe == Tool then
+				TI[ReloadingTool].CanShoot = true
+				TI[ReloadingTool].Reloading = false
+				if Tool == ReloadingTool then
+					Settings.CurrentAmmo = Settings.Ammo
+					UpdateHud("Ammo")
+				end
+			end
+		end)
+	end
+end
+
+local Shoot = function(From: Part?, Position: Vector3)
+	local List = {}
+	for i, v in Character:GetDescendants() do
+		if v:IsA("BasePart") and v ~= Tool.FirePart then
+			table.insert(List, v)
+		end
+	end
+	
+	local RI = RaycastParams.new()
+	RI.FilterType = Enum.RaycastFilterType.Blacklist
+	RI.FilterDescendantsInstances = List
+	local CheckRay = workspace:Raycast(Character.Head.Position, (Tool.FirePart.Position - Character.Head.Position).Unit*10000, RI)
+	if CheckRay and CheckRay.Instance == Tool.FirePart then
+		local RayCast = workspace:Raycast(From.Position, (Position-From.Position).Unit*100000, RayParams)
+		
+		TI[Tool]["Animations"]["FireAnim"]:Play()
+		Effects.Beam(From, Position, RayCast)
+		Effects.ShootFire(From)
+		Tool.FirePart.Sounds.FireSound:Play()
+		
+		Settings.CurrentAmmo -= 1
+		UpdateHud("all")
+		
+		local r = nil
+		
+		if RayCast then
+			local Humanoid: Humanoid = RayCast.Instance.Parent:FindFirstChildOfClass("Humanoid")
+			if not Humanoid then
+				Humanoid = RayCast.Instance.Parent.Parent:FindFirstChildOfClass("Humanoid")
+			end
+
+			if not Humanoid then
+				Effects.BulletHole(RayCast)
+			end
+			r = {
+				["Position"] = RayCast.Position,
+				["Instance"] = RayCast.Instance,
+				["Normal"] = RayCast.Normal,
+				["Distance"] = RayCast.Distance,
+				["Material"] = RayCast.Material,
+			}
+		end
+		Remotes.Fire:FireServer(Tool.Name, r, Position, Tool.FirePart.Position)
+	end
+end
+local SpawnPCHud = function()
+	PCH.Visible = true
+	PCH.GunName.Position = UDim2.new(0.039, 0, 1, 0)
+	PCH.GunImage.Position = UDim2.new(0.043, 0, 1, 0)
+	PCH.Divisor.BackgroundTransparency = 1
+	PCH.BackgroundTransparency = 1
+	PCH.Specs.ShootEngine.Position = UDim2.new(-1, 0, 0.061, 0)
+	PCH.Specs.Target.Position = UDim2.new(-1, 0, 0.379, 0)
+	PCH.Specs.Ammo.Val.TextColor3 = Color3.fromRGB(255, 255, 255)
+	PCH.Specs.Ammo.Position = UDim2.new(-1, 0, 0.697, 0)
+	
+	PCH.GunName.Text = Tool.Name
+	PCH.GunImage.Image = getrbxassetid(Settings.Silhouette)
+	PCH.Specs.Ammo.Val.Text = tostring(Settings.CurrentAmmo).."/"..tostring(Settings.Ammo)
+	PCH.Specs.ShootEngine.Text = Settings.ShootEngine
+	
+	local Thread = coroutine.create(function()
+		TweenService:Create(PCH, TweenInfo.new(0.5), {BackgroundTransparency = 0.5}):Play()
+		task.wait(0.5)
+		PCH.GunImage:TweenPosition(UDim2.new(0.042, 0,0.329, 0), nil, nil, 0.5)
+		task.wait(0.1)
+		PCH.GunName:TweenPosition(UDim2.new(0.039, 0,0.083, 0), nil, nil, 0.7)
+		TweenService:Create(PCH.Divisor, TweenInfo.new(0.5), {BackgroundTransparency = 0.5}):Play()
+		task.wait(0.5)
+		PCH.Specs.Ammo:TweenPosition(UDim2.new(0.084, 0,0.697, 0), nil, nil, 0.5)
+		PCH.Specs.Target:TweenPosition(UDim2.new(0.084, 0,0.379, 0), nil, nil, 0.5)
+		PCH.Specs.ShootEngine:TweenPosition(UDim2.new(0.075, 0,0.061, 0), nil, nil, 0.5)
+		task.wait(0.6)
+		if Settings.CurrentAmmo < 1 then
+			PCH.Specs.Ammo.Val.TextColor3 = Color3.fromRGB(255)
+		end
+	end)
+	coroutine.resume(Thread)
+	PCH.Changed:Once(function(c)
+		if c == "Visible" then
+			coroutine.close(Thread)
+		end
+	end)
+end
+
+--<|| Startup ||>--
+
+DefaultCameraFOV = Camera.FieldOfView
+
+--<|| Inputs ||>--
+
+UserInputService.InputBegan:Connect(function(Input, Paused)
+	if Tool and not Paused then
+		if Input.KeyCode == Enum.KeyCode.R and TI[Tool].Reloading == false then
+			Reload()
+		elseif Input.KeyCode == Enum.KeyCode.Q then
+			Aim(not Aiming)
+		end
+	end
+end)
+
+--<|| Connections ||>--
+
+Character.ChildAdded:Connect(function(Child)
+	if Child:IsA("Tool") then
+		local s = Child:FindFirstChild("Settings")
+		if s then
+			if s:FindFirstChild("IsAFallenGun") then
+				Settings = require(s)
+				Tool = Child
+
+				BeforeIcon = Mouse.Icon
+				Mouse.Icon = AimIcon
+				
+				if not TI[Tool] then
+					TI[Tool] = {}
+					TI[Tool].CanShoot = true
+					TI[Tool].Reloading = false
+				end
+
+				FixAimCenter()
+				
+				SpawnPCHud()
+				
+				if not TI[Tool]["Animations"] then
+					for i, v in Settings["Animations"] do
+						if v ~= nil then
+							local Animation = Instance.new("Animation")
+							Animation.AnimationId = getrbxassetid(v)
+
+							local LoadAnimation = Animator:LoadAnimation(Animation)
+							LoadAnimation.Priority = Enum.AnimationPriority.Action
+							if not TI[Tool]["Animations"] then
+								TI[Tool]["Animations"] = {}
+							end
+							TI[Tool]["Animations"][i] = LoadAnimation
+						end
+					end
+				end
+				if not Tool.FirePart:FindFirstChild("Sounds") then
+					local SoundsFolder = Instance.new("Folder")
+					SoundsFolder.Parent = Tool.FirePart
+					SoundsFolder.Name = "Sounds"
+					
+					for i, v in Settings["Sounds"] do
+						if v ~= nil then
+							local Sound = Instance.new("Sound")
+							Sound.Parent = SoundsFolder
+							Sound.Name = i
+							Sound.SoundId = getrbxassetid(v)
+							Sound.Volume = 1
+						end
+					end
+				end
+				local WaitTime = 0
+				if TI[Tool]["Animations"]["EquipAnim"] then
+					TI[Tool]["Animations"]["EquipAnim"]:Play()
+					WaitTime = TI[Tool]["Animations"]["EquipAnim"].Length
+					local EquipSound = Tool.FirePart.Sounds:FindFirstChild("EquipSound")
+					if EquipSound then
+						EquipSound:Play()
+					end
+				end
+				if WaitTime then
+					task.delay(WaitTime, function()
+						TI[Tool]["Animations"]["StandAnim"]:Play()
+					end)
+				else
+					TI[Tool]["Animations"]["StandAnim"]:Play()
+				end
+			end
+		end
+	end
+end)
+
+Character.ChildRemoved:Connect(function(Child)
+	if Child == Tool then
+		local LastTool = Tool
+		for i, v in TI[Tool]["Animations"] do
+			v:Stop()
+		end
+		TI[Tool].CanShoot = true
+		TI[Tool].Reloading = false
+		Tool = nil
+		Shooting = false
+		PCH.Visible = false
+		Mouse.Icon = BeforeIcon
+
+		if WaitingReload then
+			WaitingReload:Disconnect()
+			LastTool.FirePart.Sounds.ReloadSound:Stop()
+		end
+	end
+end)
+
+Mouse.Button1Down:Connect(function()
+	if Tool then
+		if TI[Tool].CanShoot == true then
+			if Settings.CurrentAmmo > 0 then
+				if Settings.ShootEngine == "Semi-Automatic" then
+					TI[Tool].CanShoot = false
+					Shoot(Tool.FirePart, Mouse.Hit.Position)
+					task.delay(Settings.FireRate, function()
+						TI[Tool].CanShoot = true
+					end)
+				else
+					Shooting = true
+					AutomaticShooting = task.spawn(function()
+						while true do
+							if Settings.CurrentAmmo > 0 then
+								Shoot(Tool.FirePart, Mouse.Hit.Position)
+							else
+								if TI[Tool].Reloading == false then
+									Reload()
+								end
+							end
+							task.wait(Settings.FireRate)
+						end
+					end)
+				end
+			else
+				if TI[Tool].Reloading == false then
+					Reload()
+				end
+			end
+		end
+	end
+end)
+
+Mouse.Button1Up:Connect(function()
+	if Tool then
+		Shooting = false
+		if AutomaticShooting then coroutine.close(AutomaticShooting) end
+	end
+end)
+
+Mouse.Button2Down:Connect(function()
+	if Tool then
+		Aim(true)
+	end
+end)
+
+Mouse.Button2Up:Connect(function()
+	if Tool then
+		Aim(false)
+	end
+end)
+
+--|| Third-Party ||--
+
+Remotes.Effects.OnClientEvent:Connect(function(Shooter, Origin, RayCast, Sounds, Target: Vector3)
+	if Shooter ~= Player then
+		local SS = Origin:FindFirstChild("Sounds")
+		
+		if not SS then
+			local SoundsFolder = Instance.new("Folder")
+			SoundsFolder.Parent = Origin
+			SoundsFolder.Name = "Sounds"
+
+			for i, v in Sounds do
+				if v ~= nil then
+					local Sound = Instance.new("Sound")
+					Sound.Parent = SoundsFolder
+					Sound.Name = i
+					Sound.SoundId = getrbxassetid(v)
+					Sound.Volume = 1
+				end
+			end
+		end
+		
+		SS.FireSound:Play()
+		Effects.Beam(Origin, Target, RayCast)
+		if RayCast then
+			Effects.BulletHole(RayCast)
+			Effects.ShootFire(Origin)
+		end
+	end
+end)
