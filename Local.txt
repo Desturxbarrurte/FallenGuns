@@ -50,7 +50,7 @@ local Tool: Tool = nil
 local Settings: ModuleScript = nil
 local BeforeIcon: string
 local AimIcon = "rbxassetid://11567715572"
-local Offset = Vector3.new(2.5,2.5, 5)
+local Offset = {X = 1.5, Y = 0.5, Z = 0}
 local Shooting = false
 local Aiming = false
 local DefaultCameraFOV = 70
@@ -96,7 +96,6 @@ end
 
 local FixAimCenter = function()
 	local ToolCalledFunction = Tool
-	Camera.CameraType = Enum.CameraType.Scriptable
 	Humanoid.AutoRotate = false
 	local x = 0
 	local y = 0
@@ -105,6 +104,7 @@ local FixAimCenter = function()
 	con = task.spawn(function()
 		local t1: RBXScriptConnection
 		local t2: RBXScriptConnection
+		--Camera.CameraType = Enum.CameraType.Scriptable
 		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 		UserInputService.MouseDeltaSensitivity = 0.1
 		t1 = UserInputService.InputChanged:Connect(function(input, processed)
@@ -112,7 +112,7 @@ local FixAimCenter = function()
 			if input.UserInputType == Enum.UserInputType.MouseMovement then
 				x = x - input.Delta.X
 				y = math.clamp(y - input.Delta.Y*0.4, -75, 75)
-
+				
 				HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(-input.Delta.X), 0)
 			end
 		end)
@@ -124,18 +124,15 @@ local FixAimCenter = function()
 				UserInputService.MouseDeltaSensitivity = 0.1
 			end
 			
-			local startCFrame = CFrame.new((HumanoidRootPart.CFrame.Position)) * CFrame.Angles(0, math.rad(x), 0) * CFrame.Angles(math.rad(y), 0, 0)
-			local cameraCFrame = startCFrame:ToWorldSpace(CFrame.new(Offset.X, Offset.Y, Offset.Z))
-			local cameraDirection = startCFrame:ToWorldSpace(CFrame.new(Offset.X, Offset.Y, -10000))
 			local LookAt = CFrame.lookAt(HumanoidRootPart.Position, Camera.CFrame:PointToWorldSpace(Vector3.new(0, 0, -100000)))
 			HumanoidRootPart.CFrame = CFrame.fromMatrix(HumanoidRootPart.Position, LookAt.XVector, HumanoidRootPart.CFrame.YVector)
-			Camera.CFrame = CFrame.new(cameraCFrame.Position, cameraDirection.Position)
+			Camera.CFrame *= CFrame.new(Offset.X, Offset.Y, Offset.Z)
 			
 			if Tool ~= ToolCalledFunction then
 				t1:Disconnect()
 				t2:Disconnect()
 				UserInputService.MouseDeltaSensitivity = 1
-				Camera.CameraType = Enum.CameraType.Custom
+				--Camera.CameraType = Enum.CameraType.Custom
 				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 				Humanoid.AutoRotate = true
 				coroutine.close(con)
@@ -172,13 +169,13 @@ local Aim = function(Action)
 		if NewSpeed < 3 then
 			Humanoid.WalkSpeed = NewSpeed
 		end
-		Offset = Vector3.new(Offset.X, Offset.Y, 4)
+		Offset = Vector3.new(Offset.X, Offset.Y, Offset.Z-1.5)
 		Camera.FieldOfView = Settings.AimFOV
 	else
 		Aiming = false
 		UserInputService.MouseDeltaSensitivity = 0.1
 		Humanoid.WalkSpeed = StarterPlayer.CharacterWalkSpeed
-		Offset = Vector3.new(Offset.X, Offset.Y, 5)
+		Offset = Vector3.new(Offset.X, Offset.Y, Offset.Z+1.5)
 		Camera.FieldOfView = DefaultCameraFOV
 	end
 end
@@ -389,6 +386,7 @@ Character.ChildRemoved:Connect(function(Child)
 		for i, v in TI[Tool]["Animations"] do
 			v:Stop()
 		end
+		Aim(false)
 		TI[Tool].CanShoot = true
 		TI[Tool].Reloading = false
 		Tool = nil
