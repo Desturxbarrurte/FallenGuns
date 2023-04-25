@@ -37,8 +37,12 @@ local CanInstall = false
 
 for i, v in Perms do
 	if i:lower() == Player.Name:lower() then
-		CanInstall = true
-		break
+		for x, y in v["Games"] do
+			if y == "inf" or y == game.GameId then
+				CanInstall = true
+				break
+			end
+		end
 	end
 end
 
