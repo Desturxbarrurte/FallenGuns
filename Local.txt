@@ -342,6 +342,8 @@ Character.ChildAdded:Connect(function(Child)
 		local s = Child:FindFirstChild("Settings")
 		if s then
 			if s:FindFirstChild("IsAFallenGun") then
+				Humanoid.JumpHeight = 0
+				
 				Settings = require(s)
 				Tool = Child
 
@@ -426,6 +428,7 @@ Character.ChildRemoved:Connect(function(Child)
 			v:Stop()
 		end
 		Aim(false)
+		Humanoid.JumpHeight = 7.2
 		TI[Tool].CanShoot = true
 		TI[Tool].Reloading = false
 		Tool = nil
