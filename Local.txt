@@ -62,6 +62,10 @@ RayParams.FilterType = Enum.RaycastFilterType.Blacklist
 RayParams.FilterDescendantsInstances = {Character}
 --<|| Tables ||>--
 local TI = {}
+local GlobalPreLoadedAnimations = {
+	["Right"] = "rbxassetid://63897",
+	["Left"] = "rbxassetid://63897"
+}
 --<|| Modules ||>--
 local Effects = require(Modules.Effects)
 --<|| Functions ||>--
@@ -143,6 +147,31 @@ local FixAimCenter = function()
 	return con
 end
 
+local ToRight = function()
+	Humanoid.WalkSpeed = 0
+	local Diretion = workspace:Raycast(HumanoidRootPart.Position, HumanoidRootPart.CFrame.RightVector.Unit*15, RayParams)
+	if Diretion and Diretion.Distance < 15 then
+		Diretion = Diretion.Position
+	else
+		Diretion = HumanoidRootPart.CFrame*CFrame(15, 0, 0)
+		Diretion = Diretion.Position
+	end
+	TweenService:Create(HumanoidRootPart, TweenInfo.new(0.5), {CFrame = Diretion})
+	GlobalPreLoadedAnimations.Right:Play()
+end
+
+local ToLeft = function()
+	Humanoid.WalkSpeed = 0
+	local Diretion = workspace:Raycast(HumanoidRootPart.Position, -HumanoidRootPart.CFrame.RightVector.Unit*15, RayParams)
+	if Diretion.Distance > 15 then
+		Diretion = (HumanoidRootPart.CFrame*CFrame(-15, 0, 0)).Position
+	else
+		Diretion = Diretion.Position
+	end
+	TweenService:Create(HumanoidRootPart, TweenInfo.new(0.5), {CFrame = Diretion})
+	GlobalPreLoadedAnimations.Right:Play()
+end
+
 local getrbxassetid = function(number: number)
 	if typeof(number) == "string" then
 		if string.find(number, "rbxassetid://") then
@@ -169,13 +198,13 @@ local Aim = function(Action)
 		if NewSpeed < 3 then
 			Humanoid.WalkSpeed = NewSpeed
 		end
-		Offset = Vector3.new(Offset.X, Offset.Y, Offset.Z-1.5)
+		Offset = Vector3.new(Offset.X, Offset.Y, -1.5)
 		Camera.FieldOfView = Settings.AimFOV
 	else
 		Aiming = false
 		UserInputService.MouseDeltaSensitivity = 0.1
 		Humanoid.WalkSpeed = StarterPlayer.CharacterWalkSpeed
-		Offset = Vector3.new(Offset.X, Offset.Y, Offset.Z+1.5)
+		Offset = Vector3.new(Offset.X, Offset.Y, 0)
 		Camera.FieldOfView = DefaultCameraFOV
 	end
 end
@@ -374,6 +403,16 @@ Character.ChildAdded:Connect(function(Child)
 					end)
 				else
 					TI[Tool]["Animations"]["StandAnim"]:Play()
+				end
+				
+				for i, v in GlobalPreLoadedAnimations do
+					if typeof(v) == "string" then
+						local Animation = Instance.new("Animation")
+						Animation.AnimationId = v
+						local LoadedAnim = Animator:LoadAnimation(Animation)
+						LoadedAnim.Priority = Enum.AnimationPriority.Action
+						GlobalPreLoadedAnimations[i] = LoadedAnim
+					end
 				end
 			end
 		end
