@@ -1,3 +1,21 @@
+--[[
+
+	:::::::::::::::  .::::::::::::::.  :::::			:::::            :::::::::::::::: ::::::: 	    ::::
+	::::::::::::::: :::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::::::	    ::::
+	::::			:::: 		  :::: :::::			:::::			 :::::			  :::: ::::	    ::::
+	::::			::::          :::: :::::			:::::			 :::::			  ::::  ::::	::::
+	::::::::::::::: ::::	      :::: :::::			:::::		     :::::			  ::::   ::::   ::::
+	::::::::::::::: ::::	      :::: :::::			:::::			 :::::::::::::::: ::::    ::::  ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::::::::::::: ::::     :::: ::::
+	::::			:::::::::::::::::: :::::			:::::			 :::::		   	  ::::      ::::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	     :::::::
+	::::			::::		  :::: :::::			:::::			 :::::		   	  ::::	      ::::::
+	::::			::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		   :::::
+	::::		    ::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		    ::::
+	
+
+]]
+
 local HtppService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
@@ -14,6 +32,8 @@ local AD = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/r
 local IF = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/InstallerFolder")
 
 local Perms = HtppService:JSONDecode(HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Permissions"))
+
+print(Perms)
 
 local CanInstall = false
 
