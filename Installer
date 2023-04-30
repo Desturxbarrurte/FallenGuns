@@ -14,7 +14,7 @@
 	::::		    ::::		  :::: :::::::::::::::: :::::::::::::::: :::::::::::::::: ::::		    ::::
 	
 
-]] -->> Fallen Guns ©2023, made by Desturxbarrurte (Sayed#9390)
+]]
 
 local HtppService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -37,12 +37,8 @@ local CanInstall = false
 
 for i, v in Perms do
 	if i:lower() == Player.Name:lower() then
-		for x, y in v["Games"] do
-			if y == "inf" or y == game.GameId then
-				CanInstall = true
-				break
-			end
-		end
+		CanInstall = true
+		break
 	end
 end
 
