@@ -254,6 +254,12 @@ local Shoot = function(From: Part?, Position: Vector3)
 		Effects.ShootFire(From)
 		Tool.FirePart.Sounds.FireSound:Play()
 		
+		TI[Tool].CanShoot = false
+		
+		task.delay(Settings.FireRate, function()
+			TI[Tool].CanShoot = true
+		end)
+		
 		Settings.CurrentAmmo -= 1
 		UpdateHud("all")
 		
@@ -448,11 +454,7 @@ Mouse.Button1Down:Connect(function()
 		if TI[Tool].CanShoot == true then
 			if Settings.CurrentAmmo > 0 then
 				if Settings.ShootEngine == "Semi-Automatic" then
-					TI[Tool].CanShoot = false
 					Shoot(Tool.FirePart, Mouse.Hit.Position)
-					task.delay(Settings.FireRate, function()
-						TI[Tool].CanShoot = true
-					end)
 				else
 					Shooting = true
 					AutomaticShooting = task.spawn(function()
