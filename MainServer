@@ -70,7 +70,7 @@ Remotes.Fire.OnServerEvent:Connect(function(Player, ToolName: string, RayCast:Ra
 			RayParams.FilterType = Enum.RaycastFilterType.Blacklist
 			RayParams.FilterDescendantsInstances = {Character}
 			
-			local RR = workspace:Raycast(Tool.FirePart.Position, (Position-Tool.FirePart.Position).Unit*10000, RayParams)
+			local RR = RayCast --workspace:Raycast(Tool.FirePart.Position, (Position-Tool.FirePart.Position).Unit*10000, RayParams)
 			if RR then
 				if RR.Instance == RayCast.Instance and RR.Distance <= Settings.Range then
 					local Damage = Settings.Damage
