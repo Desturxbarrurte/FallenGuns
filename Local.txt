@@ -110,7 +110,6 @@ local FixAimCenter = function()
 		local t2: RBXScriptConnection
 		--Camera.CameraType = Enum.CameraType.Scriptable
 		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
-		UserInputService.MouseDeltaSensitivity = 0.1
 		t1 = UserInputService.InputChanged:Connect(function(input, processed)
 			if processed then return end
 			if input.UserInputType == Enum.UserInputType.MouseMovement then
@@ -124,10 +123,6 @@ local FixAimCenter = function()
 		t2 = RunService.RenderStepped:Connect(function()
 			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 			
-			if UserInputService.MouseDeltaSensitivity ~= 0.1 then
-				UserInputService.MouseDeltaSensitivity = 0.1
-			end
-			
 			local LookAt = CFrame.lookAt(HumanoidRootPart.Position, Camera.CFrame:PointToWorldSpace(Vector3.new(0, 0, -100000)))
 			HumanoidRootPart.CFrame = CFrame.fromMatrix(HumanoidRootPart.Position, LookAt.XVector, HumanoidRootPart.CFrame.YVector)
 			Camera.CFrame *= CFrame.new(Offset.X, Offset.Y, Offset.Z)
@@ -135,7 +130,6 @@ local FixAimCenter = function()
 			if Tool ~= ToolCalledFunction then
 				t1:Disconnect()
 				t2:Disconnect()
-				UserInputService.MouseDeltaSensitivity = 1
 				--Camera.CameraType = Enum.CameraType.Custom
 				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 				Humanoid.AutoRotate = true
@@ -190,7 +184,6 @@ end
 local Aim = function(Action)
 	if Action == true then
 		Aiming = true
-		UserInputService.MouseDeltaSensitivity = 0.05
 		if TI[Tool]["AimAnim"] then
 			TI[Tool]["AimAnim"]:Play()
 		end
@@ -202,7 +195,6 @@ local Aim = function(Action)
 		Camera.FieldOfView = Settings.AimFOV
 	else
 		Aiming = false
-		UserInputService.MouseDeltaSensitivity = 0.1
 		Humanoid.WalkSpeed = StarterPlayer.CharacterWalkSpeed
 		Offset = Vector3.new(Offset.X, Offset.Y, 0)
 		Camera.FieldOfView = DefaultCameraFOV
