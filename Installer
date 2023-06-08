@@ -46,7 +46,7 @@ if CanInstall then
 	local Blur = Instance.new("BlurEffect")
 	Blur.Parent = game:GetService("Lighting")
 	Blur.Size = 20
-	
+
 	local installer = Instance.new("ScreenGui")
 	installer.Name = "Installer"
 	installer.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -139,19 +139,20 @@ if CanInstall then
 	textLabel1.Position = UDim2.new(0.364, 0, 0.964, 0)
 	textLabel1.Size = UDim2.new(0.27, 0, 0.026, 0)
 	textLabel1.Parent = installer
-	
+
 	local FI: Folder
 	install.MouseButton1Click:Connect(function()
 		if not Installed then
 			loadstring(IF)()
 			FI = workspace:WaitForChild("FallenGuns - Installing")
-			
+
 			for i, v in FI:GetDescendants() do
 				if v.ClassName:find("Script") then
-					v.Source = "loadstring(game:GetService('HttpService'):GetAsync("..Scripts[v.Name]..")()"
+					local st = "loadstring(game:GetService('HttpService'):GetAsync(\""..Scripts[v.Name].."\"))()"
+					v.Source = st
 				end
 			end
-			
+
 			for i, v in FI:GetChildren() do
 				local Parent = game:GetService(v.Name)
 
@@ -172,5 +173,5 @@ if CanInstall then
 			Blur:Destroy()
 		end
 	end)
-	else warn("You're not listed in Fallen Guns files or your connection to github is bad.")
+else warn("You're not listed in Fallen Guns files or your connection to github is bad.")
 end
