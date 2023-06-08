@@ -142,7 +142,6 @@ if CanInstall then
 	
 	local FI: Folder
 	install.MouseButton1Click:Connect(function()
-		game:GetService("ServerScriptService").LoadStringEnabled = true
 		if not Installed then
 			loadstring(IF)()
 			FI = workspace:WaitForChild("FallenGuns - Installing")
