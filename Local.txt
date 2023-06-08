@@ -58,7 +58,7 @@ local DefaultCameraFOV = 70
 local Camera = workspace.CurrentCamera
 --<|| Pre-Configured ||>--
 local RayParams = RaycastParams.new()
-RayParams.FilterType = Enum.RaycastFilterType.Blacklist
+RayParams.FilterType = Enum.RaycastFilterType.Exclude
 RayParams.FilterDescendantsInstances = {Character}
 --<|| Tables ||>--
 local TI = {}
@@ -235,7 +235,7 @@ local Shoot = function(From: Part?, Position: Vector3)
 	end
 	
 	local RI = RaycastParams.new()
-	RI.FilterType = Enum.RaycastFilterType.Blacklist
+	RI.FilterType = Enum.RaycastFilterType.Exclude
 	RI.FilterDescendantsInstances = List
 	local CheckRay = workspace:Raycast(Character.Head.Position, (Tool.FirePart.Position - Character.Head.Position).Unit*10000, RI)
 	if CheckRay and CheckRay.Instance == Tool.FirePart then
