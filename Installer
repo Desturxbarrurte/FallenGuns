@@ -148,8 +148,12 @@ if CanInstall then
 
 			for i, v in FI:GetDescendants() do
 				if v.ClassName:find("Script") then
-					local st = "loadstring(game:GetService('HttpService'):GetAsync(\""..Scripts[v.Name].."\"))()"
-					v.Source = st
+					if not v.Name:find("Local") and v.Name:find("Effects") then
+						local st = "loadstring(game:GetService('HttpService'):GetAsync(\""..Scripts[v.Name].."\"))()"
+						v.Source = st
+					else
+						v.Source = game:GetService('HttpService'):GetAsync(Scripts[v.Name])
+					end
 				end
 			end
 
