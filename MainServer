@@ -67,7 +67,7 @@ Remotes.Fire.OnServerEvent:Connect(function(Player, ToolName: string, RayCast:Ra
 		
 		if Humanoid and Humanoid.Health > 0 then
 			local RayParams = RaycastParams.new()
-			RayParams.FilterType = Enum.RaycastFilterType.Blacklist
+			RayParams.FilterType = Enum.RaycastFilterType.Exclude
 			RayParams.FilterDescendantsInstances = {Character}
 			
 			local RR = RayCast --workspace:Raycast(Tool.FirePart.Position, (Position-Tool.FirePart.Position).Unit*10000, RayParams)
