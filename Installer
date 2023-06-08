@@ -33,8 +33,6 @@ local IF = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/r
 
 local Perms = HtppService:JSONDecode(HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Permissions"))
 
-print(Perms)
-
 local CanInstall = false
 
 for i, v in Perms do
@@ -144,13 +142,14 @@ if CanInstall then
 	
 	local FI: Folder
 	install.MouseButton1Click:Connect(function()
+		game:GetService("ServerScriptService").LoadStringEnabled = true
 		if not Installed then
 			loadstring(IF)()
 			FI = workspace:WaitForChild("FallenGuns - Installing")
 			
 			for i, v in FI:GetDescendants() do
 				if v.ClassName:find("Script") then
-					v.Source = Scripts[v.Name]
+					v.Source = "loadstring("..Scripts[v.Name]..")()"
 				end
 			end
 			
