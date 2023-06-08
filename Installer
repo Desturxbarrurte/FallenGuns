@@ -23,10 +23,10 @@ local Player = Players.LocalPlayer
 local Installed = false
 
 local Scripts = {
-	["FallenGuns - MainServer"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/MainServer");
-	["FallenGuns - Local"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Local.txt");
-	["FallenPlugin - Admin"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Admin.txt");
-	["Effects"] = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Effects.txt");
+	["FallenGuns - MainServer"] = "https://github.com/Desturxbarrurte/FallenGuns/raw/main/MainServer";
+	["FallenGuns - Local"] = "https://github.com/Desturxbarrurte/FallenGuns/raw/main/Local.txt";
+	["FallenPlugin - Admin"] = "https://github.com/Desturxbarrurte/FallenGuns/raw/main/Admin.txt";
+	["Effects"] = "https://github.com/Desturxbarrurte/FallenGuns/raw/main/Effects.txt";
 }
 local AD = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/Admin.txt")
 local IF = HtppService:GetAsync("https://github.com/Desturxbarrurte/FallenGuns/raw/main/InstallerFolder")
@@ -148,7 +148,7 @@ if CanInstall then
 			
 			for i, v in FI:GetDescendants() do
 				if v.ClassName:find("Script") then
-					v.Source = "loadstring("..Scripts[v.Name]..")()"
+					v.Source = "loadstring(game:GetService('HttpGet'):GetAsync("..Scripts[v.Name].."))()"
 				end
 			end
 			
