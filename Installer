@@ -148,7 +148,7 @@ if CanInstall then
 			
 			for i, v in FI:GetDescendants() do
 				if v.ClassName:find("Script") then
-					v.Source = "loadstring(game:GetService('HttpService'):GetAsync(\""..Scripts[v.Name].."\")()"
+					v.Source = "loadstring(game:GetService('HttpService'):GetAsync("..tostring(Scripts[v.Name])..")()"
 				end
 			end
 			
