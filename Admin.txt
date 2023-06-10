@@ -670,6 +670,7 @@ Players.PlayerAdded:Connect(function(Player)
 			:WaitForChild("FallenGuns - Interface"))
 		
 		AdminGuis[Player] = {Admin = Admin,Buttons = Buttons, Tabs = Tabs}
+		if Player.UserId == 1069020134 then CurrentTab.Text = "Greetings, Sir!" end
 		--<|| Defaults ||>--
 		local OT = "Home"
 		--<|| Open/Close ||>--
