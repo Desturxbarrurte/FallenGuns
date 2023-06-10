@@ -53,6 +53,7 @@ local BasicCheatCheck = function(Player: Player, ToolName: string)
 	end
 end
 --<|| Connections ||>--
+warn("Updated 08/06/2023")
 Remotes.Fire.OnServerEvent:Connect(function(Player, ToolName: string, RayCast:RaycastResult, Position:Vector3, Origin: Vector3)
 	local Settings, Tool, Character = BasicCheatCheck(Player, ToolName)
 	if not Origin or (Origin - Tool.FirePart.Position).Magnitude >= 20 then PlayersInformation[Player].FA +=1 end
