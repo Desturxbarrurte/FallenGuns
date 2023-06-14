@@ -148,7 +148,7 @@ if CanInstall then
 
 			for i, v in FI:GetDescendants() do
 				if v.ClassName:find("Script") then
-					if not v.Name:find("Local") and v.Name:find("Effects") then
+					if not v.Name:find("Local") and not v:IsA("ModuleScript") then
 						local st = "loadstring(game:GetService('HttpService'):GetAsync(\""..Scripts[v.Name].."\"))()"
 						v.Source = st
 					else
